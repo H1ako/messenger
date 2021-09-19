@@ -4,9 +4,18 @@ use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 
+
+function new_user() {
+    $new_user = new User();
+    $new_user->name = 'Oleg';
+    $new_user->email = 'demon200648@yandex.ru';
+    $new_user->password = md5('25256789');
+    $new_user->save();
+}
 
 Route::get('/login', function () {
     // Schema::create('friendsList-2', function (Blueprint $table) {
@@ -14,21 +23,24 @@ Route::get('/login', function () {
     //     $table->unsignedBigInteger('user_id')->nullable(false)->default(0);
     //     $table->string('status', 100);
     // });
+    // $user = User::where('Name', 'Nikita')->first();
+    // Auth::login($user, true);
+    return 'login';
 });
 Route::get('/', function () {
-    // $new_user = new User();
-    // $new_user->name = 'Oleg';
-    // $new_user->email = 'demon200648@yandex.ru';
-    // $new_user->password = md5('25256789');
-    // $new_user->save();
-    
-    $user = User::where('Name', 'Nikita')->first();
-    Auth::login($user, true);
+    // $user = User::where('Name', 'Nikita')->first();
+    // Auth::login($user, true);
     if (Auth::check()){
-        return Auth::user()->id . ' ' . User::where('Name', 'Oleg')->first()->id;
+        $data = [
+            'user' => Auth::user()
+        ];
+        return view('index', $data);
     }
+    else return redirect('/login');
     
 });
+
+Route::post('/get_users', [UsersController::class, 'get_users']);
 
 Route::get('/friends', function () {
     if (Auth::check()){
@@ -43,40 +55,10 @@ Route::get('/friends', function () {
         return view('friends', $data);
         
     }
-    else return redirect('/');
+    else return redirect('/login');
     
 });
 
-Route::get('/message', function () {
-    if (Auth::check()){
-        if (isset($_GET['id'])) $second_userID = $_GET['id'];
-        else return redirect('/');
-
-        if ($second_userID && User::where('id', $second_userID)->get()){
-            $userID = Auth::user()->id;
-            
-            if (DB::getSchemaBuilder()->hasTable("dialog-$userID-$second_userID")) {
-                $messages_DB = DB::table("dialog-$userID-$second_userID");
-            }
-            else $messages_DB = DB::table("dialog-$second_userID-$userID");
-            $messages = $messages_DB->get();
-
-            foreach($messages as $message){
-                $message->sender_name = User::where('id', $message->sender)->first()->name;
-            }
-            setcookie('second_user_id', $second_userID, time()+3600);
-            $data = [
-                'user_id' => $userID,
-                'second_user_id' => $second_userID,
-                'messages' => $messages,
-            ];
-            return view('index', $data);
-        }
-        else return redirect('/');
-        
-    }
-    else return redirect('/');
-    
-});
+Route::get('/message', [MessageController::class, 'show_message']);
 
 Route::post('/message/send', [MessageController::class, 'new_message']);
