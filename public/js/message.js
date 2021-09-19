@@ -1,14 +1,46 @@
 const send_btn = document.getElementById('message_send');
 
+const second_user_id = getCookie('second_user_id');
+var started = false;
+var data = {
+    second_user_id: second_user_id,
+    last_message_id: 'start'
+}
+
+setInterval(async () => {
+    await fetch('/message/check', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+            'X-CSRF-Token': document.querySelector('meta[name="_token"]').getAttribute('content')
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then((response) => {
+        if (response) {
+            if (started && response.status === 200) {
+                data.last_message_id = response.last_message_id;
+                const message_area = document.getElementById('message-area');
+                message_area.innerHTML += `<div class='message-area__message'><div class='message-name'>${response.sender}</div><div class='message-content'><div class='message-content__time'>${response.time}</div><div class='message-content__text'>${response.text}</div></div></div>`;
+            }
+            else if (!started) {
+                started = true;
+                data.last_message_id = response.last_message_id;
+            }
+        }
+    })
+    .catch(err => console.log(err))
+}, 1500);
+
 function getCookie(name) {
     let matches = document.cookie.match(new RegExp(
       "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
     ));
     return matches ? decodeURIComponent(matches[1]) : undefined;
-  }
+}
 
 send_btn.addEventListener('click', async () => {
-    console.log('click');
     const message_input = document.getElementById('new_message_text');
     const message_text = message_input.value;
     message_input.value = '';

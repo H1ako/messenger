@@ -11,8 +11,8 @@ use Illuminate\Database\Schema\Blueprint;
 
 function new_user() {
     $new_user = new User();
-    $new_user->name = 'Oleg';
-    $new_user->email = 'demon200648@yandex.ru';
+    $new_user->name = 'Dima';
+    $new_user->email = '';
     $new_user->password = md5('25256789');
     $new_user->save();
 }
@@ -23,8 +23,15 @@ Route::get('/login', function () {
     //     $table->unsignedBigInteger('user_id')->nullable(false)->default(0);
     //     $table->string('status', 100);
     // });
-    // $user = User::where('Name', 'Nikita')->first();
+    // new_user();
+    
+    // $user = User::where('Name', 'Dima')->first();
     // Auth::login($user, true);
+    // Schema::create("friendsList-$user->id", function (Blueprint $table) {
+    //     $table->id();
+    //     $table->unsignedBigInteger('user_id')->nullable(false)->default(0);
+    //     $table->string('status', 100);
+    // });
     return 'login';
 });
 Route::get('/', function () {
@@ -59,6 +66,11 @@ Route::get('/friends', function () {
     
 });
 
+Route::post('/friends/get', [UsersController::class, 'get_friends']);
+
+Route::post('/friends/actions', [UsersController::class, 'friendAction']);
+
 Route::get('/message', [MessageController::class, 'show_message']);
 
 Route::post('/message/send', [MessageController::class, 'new_message']);
+Route::post('/message/check', [MessageController::class, 'check_message']);

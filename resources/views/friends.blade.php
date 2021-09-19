@@ -10,11 +10,12 @@
 </head>
 <body>
     <div id="friends-area">
-        @foreach ($friends as $friend)
-        <div class='friends-area_friend'>
-            <div class='message-name'><?=$friend->user_name?></div>
+        {{-- @foreach ($friends as $friend)
+        <div class='friends-area__friend'>
+            <div class='friend-name'><?=//$friend->user_name?></div>
         </div>
-        @endforeach
+        @endforeach --}}
+
     </div>
     <div class="">
         <a href="/">Home</a>
