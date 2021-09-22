@@ -11,41 +11,46 @@ use Illuminate\Database\Schema\Blueprint;
 
 class MessageController extends Controller
 {
-    public function show_message() {
+    public function show_message($id) {
         if (Auth::check()){
-            if (isset($_GET['id'])) $second_userID = $_GET['id'];
-            else return redirect('/friends');
-    
-            if ($second_userID && User::where('id', $second_userID)->get()){
-                $userID = Auth::user()->id;
-                
-                if (DB::getSchemaBuilder()->hasTable("dialog-$userID-$second_userID")) {
-                    $messages_DB = DB::table("dialog-$userID-$second_userID");
-                }
-                else if (DB::getSchemaBuilder()->hasTable("dialog-$second_userID-$userID")) {
-                    $messages_DB = DB::table("dialog-$second_userID-$userID");
+            $second_user_id = $id;
+            if ($second_user_id && User::where('id', $second_user_id)->first()){
+                $user_id = Auth::user()->id;
+                $cur_user_DB = User::where('id', $user_id);
+                $cur_user = $cur_user_DB->first();
+                $user_messages = json_decode($cur_user->messages, true);
+                if (isset($user_messages[$second_user_id])) {
+                    $dialog = DB::table($user_messages[$second_user_id]);
                 }
                 else {
-                    Schema::create("dialog-$userID-$second_userID", function (Blueprint $table) {
+                    Schema::create("dialog-$user_id-$second_user_id", function (Blueprint $table) {
                         $table->id();
                         $table->text('text')->nullable();
                         $table->unsignedBigInteger('sender')->nullable(false);
                         $table->string('time', 100)->nullable(false);
                     });
-                    $messages_DB = DB::table("dialog-$userID-$second_userID");
+                    $sec_user_DB = User::where('id', $second_user_id);
+                    $sec_user = $sec_user_DB->first();
+                    $sec_user_messages = json_decode($sec_user->messages, true);
+                    $sec_user_messages[$user_id] = "dialog-$user_id-$second_user_id";
+                    $sec_user_DB->update(['messages' => json_encode($sec_user_messages)]);
+
+                    $user_messages[$second_user_id] = "dialog-$user_id-$second_user_id";
+                    $cur_user_DB->update(['messages' => json_encode($user_messages)]);
+                    $dialog = DB::table("dialog-$user_id-$second_user_id");
                 }
-                $messages = $messages_DB->get();
+                $messages = $dialog->get();
     
                 foreach($messages as $message){
                     $message->sender_name = User::where('id', $message->sender)->first()->name;
                 }
-                setcookie('second_user_id', $second_userID, time()+3600);
+                setcookie('second_user_id', $second_user_id, time()+3600);
                 $data = [
-                    'user_id' => $userID,
-                    'second_user_id' => $second_userID,
+                    'user_id' => $user_id,
+                    'second_user_id' => $second_user_id,
                     'messages' => $messages,
                 ];
-                return view('message', $data);
+                return view('message_user', $data);
             }
             else return redirect('/friends');
             
@@ -58,10 +63,13 @@ class MessageController extends Controller
         $second_user_id = $request->input('second_user_id');
         $text = $request->input('message_text');
         $time = $request->input('time');
-        if (DB::getSchemaBuilder()->hasTable("dialog-$user_id-$second_user_id")) {
-            $dialog = DB::table("dialog-$user_id-$second_user_id");
+
+        $user_id = Auth::user()->id;
+        $cur_user = User::where('id', $user_id)->first();
+        $user_messages = json_decode($cur_user->messages, true);
+        if (isset($user_messages[$second_user_id])) {
+            $dialog = DB::table($user_messages[$second_user_id]);
         }
-        else $dialog = DB::table("dialog-$second_user_id-$user_id");
         $dialog->insert([
             'text' => $text,
             'sender' => $user_id,
@@ -73,29 +81,58 @@ class MessageController extends Controller
         $user_id = Auth::user()->id;
         $second_user_id = $request->input('second_user_id');
         $last_message_id = $request->input('last_message_id');
-        $data = [];
-        // $second_user_id = 4;
-        // $last_message_id = 9;
-        
-        if (DB::getSchemaBuilder()->hasTable("dialog-$user_id-$second_user_id")) {
-            $dialog = DB::table("dialog-$user_id-$second_user_id");
+        // $second_user_id = 2;
+        // $last_message_id = 'zero';
+        $data = [
+            'last_message_id' => 'start'
+        ];
+
+        $cur_user = User::where('id', $user_id)->first();
+        $user_messages = json_decode($cur_user->messages, true);
+        if (isset($user_messages[$second_user_id])) {
+            $dialog = DB::table($user_messages[$second_user_id]);
         }
-        else $dialog = DB::table("dialog-$second_user_id-$user_id");
+        
         $last_message = $dialog->where('sender', $second_user_id)->orderBy('id', 'desc')->first();
         if ($last_message_id === 'start') {
             $data = [
-                'last_message_id' => $last_message->id
+                'last_message_id' => $last_message != null ? $last_message->id : 'zero'
             ];
+            
+            return json_encode($data);
+        }
+
+        else if ($last_message_id === 'zero') {
+            if ($last_message != null) {
+                $data = [
+                    'text' => $last_message->text,
+                    'sender' => User::where('id', $last_message->sender)->first()->name,
+                    'time' => $last_message->time,
+                    'last_message_id' => $last_message->id,
+                    'status' => 200
+                ];
+            }
+            else {
+                $data = [
+                    'last_message_id' => 'zero'
+                ];
+            }
+
             return json_encode($data);
         }
         
-        if ($last_message->id != $last_message_id) {
+        if (isset($last_message->id) && $last_message->id != $last_message_id) {
             $data = [
                 'text' => $last_message->text,
                 'sender' => User::where('id', $last_message->sender)->first()->name,
                 'time' => $last_message->time,
                 'last_message_id' => $last_message->id,
                 'status' => 200
+            ];
+        }
+        else {
+            $data = [
+                'last_message_id' => $last_message->id
             ];
         }
         return json_encode($data);

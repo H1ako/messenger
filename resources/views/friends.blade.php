@@ -9,14 +9,7 @@
     <link rel="stylesheet" href="/css/friends.css">
 </head>
 <body>
-    <div id="friends-area">
-        {{-- @foreach ($friends as $friend)
-        <div class='friends-area__friend'>
-            <div class='friend-name'><?=//$friend->user_name?></div>
-        </div>
-        @endforeach --}}
-
-    </div>
+    <div id="friends-area"></div>
     <div class="">
         <a href="/">Home</a>
     </div>

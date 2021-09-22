@@ -65,7 +65,7 @@ class Friend extends React.Component{
         return (
             <div className='friends__friend'>
                 <div className='main-info'>
-                    <a href={`/message?id=${this.props.user_id}`}><div className='main-info__name'>{this.props.name}</div></a>
+                    <a href={`/message/${this.props.user_id}`}><div className='main-info__name'>{this.props.name}</div></a>
                     <div className='main-info__id'>{this.props.user_id}</div>
                 </div>
                 {this.props.status == 'friend' &&

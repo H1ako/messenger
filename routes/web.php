@@ -17,6 +17,7 @@ function new_user() {
     $new_user->save();
 }
 
+/* =+=+=+= Login/Register =+=+=+= */
 Route::get('/login', function () {
     // Schema::create('friendsList-2', function (Blueprint $table) {
     //     $table->id();
@@ -25,18 +26,24 @@ Route::get('/login', function () {
     // });
     // new_user();
     
-    // $user = User::where('Name', 'Dima')->first();
+    // $user = User::where('Name', 'Oleg')->first();
     // Auth::login($user, true);
     // Schema::create("friendsList-$user->id", function (Blueprint $table) {
     //     $table->id();
     //     $table->unsignedBigInteger('user_id')->nullable(false)->default(0);
     //     $table->string('status', 100);
     // });
+    // $data = [
+    //     1 => 'dialog-1-2'
+    // ];
+    // $user_id = Auth::user()->id;
+    // $user = User::where('id', $user_id)->update(['messages' => json_encode($data)]);
+    // $user->save();
     return 'login';
 });
+
+/* =+=+=+= Home =+=+=+= */
 Route::get('/', function () {
-    // $user = User::where('Name', 'Nikita')->first();
-    // Auth::login($user, true);
     if (Auth::check()){
         $data = [
             'user' => Auth::user()
@@ -46,9 +53,9 @@ Route::get('/', function () {
     else return redirect('/login');
     
 });
-
 Route::post('/get_users', [UsersController::class, 'get_users']);
 
+/* =+=+=+= Friends =+=+=+= */
 Route::get('/friends', function () {
     if (Auth::check()){
         $userID = Auth::user()->id;
@@ -62,15 +69,21 @@ Route::get('/friends', function () {
         return view('friends', $data);
         
     }
-    else return redirect('/login');
+    return redirect('/login');
     
 });
-
 Route::post('/friends/get', [UsersController::class, 'get_friends']);
-
 Route::post('/friends/actions', [UsersController::class, 'friendAction']);
 
-Route::get('/message', [MessageController::class, 'show_message']);
-
-Route::post('/message/send', [MessageController::class, 'new_message']);
-Route::post('/message/check', [MessageController::class, 'check_message']);
+/* =+=+=+= Message =+=+=+= */
+Route::get('/message', function() {
+    if (Auth::check()) {
+        $data = [];
+        return view('message', $data);
+    }
+    return redirect('/login');
+    
+});
+Route::get('/message/{id}', [MessageController::class, 'show_message']);
+Route::post('/message_action/send', [MessageController::class, 'new_message']);
+Route::post('/message_action/check', [MessageController::class, 'check_message']);
