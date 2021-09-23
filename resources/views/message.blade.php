@@ -9,10 +9,9 @@
     <link rel="stylesheet" href="/css/message.css">
 </head>
 <body>
-    <input id='new_message_text' type='text' name='new_message_text' placeholder='Type Here'>
-    <label for="new_message_text">
-        <button id='message_send'>Send</button>
-    </label>
+    <div id='chats-area' class="chats-area">
+
+    </div>
     <div class="">
         <a href="/">Home</a>
     </div>

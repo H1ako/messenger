@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Chat;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 
@@ -136,5 +137,15 @@ class MessageController extends Controller
             ];
         }
         return json_encode($data);
+    }
+
+    public function get_chats() {
+        $user = Auth::user();
+        $user_id = $user->id;
+        $user_chats_ids = json_decode($user->chats, true);
+        
+        $chats = Chat::whereIn('id', $user_chats_ids)->orderBy('last_message_date')->get();
+        $user_messages = json_decode($user->messages, true);
+        return 'home';
     }
 }
