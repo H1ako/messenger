@@ -2,6 +2,8 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use App\Models\Chat;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\UsersController;
@@ -11,7 +13,7 @@ use Illuminate\Database\Schema\Blueprint;
 
 function new_user() {
     $new_user = new User();
-    $new_user->name = 'Dima';
+    $new_user->name = 'Nikita';
     $new_user->email = '';
     $new_user->password = md5('25256789');
     $new_user->save();
@@ -19,20 +21,29 @@ function new_user() {
 
 /* =+=+=+= Login/Register =+=+=+= */
 Route::get('/login', function () {
-    // Schema::create('friendsList-2', function (Blueprint $table) {
-    //     $table->id();
-    //     $table->unsignedBigInteger('user_id')->nullable(false)->default(0);
-    //     $table->string('status', 100);
-    // });
-    // new_user();
+    // $chat = new Chat();
+    // $chat->members = json_encode([1]);
+    // $chat->name = 'Rabotyagi';
+    // $chat->admins = json_encode([1 => 'creator']);
+    // $chat->last_message_date = Carbon::now()->format('Y-m-d H:i:s');
+    // $chat->last_message_user = 0;
+    // $chat->save();
+
     
-    // $user = User::where('Name', 'Oleg')->first();
-    // Auth::login($user, true);
+    // $new_user = new User();
+    // $new_user->name = 'Oleg';
+    // $new_user->email = 's';
+    // $new_user->password = md5('25256789');
+    // $new_user->save();
+    // $user = User::where('Name', 'Nikita')->update(['chats' => json_encode([$chat->id])]);
     // Schema::create("friendsList-$user->id", function (Blueprint $table) {
     //     $table->id();
     //     $table->unsignedBigInteger('user_id')->nullable(false)->default(0);
     //     $table->string('status', 100);
     // });
+    
+    
+    // Auth::login($user, true);
     // $data = [
     //     1 => 'dialog-1-2'
     // ];

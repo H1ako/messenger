@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Chat;
+use App\Models\Dialog;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 
@@ -21,10 +23,14 @@ class MessageController extends Controller
                 $cur_user = $cur_user_DB->first();
                 $user_messages = json_decode($cur_user->messages, true);
                 if (isset($user_messages[$second_user_id])) {
-                    $dialog = DB::table($user_messages[$second_user_id]);
+                    $dialog = DB::table('dialog-'.$user_messages[$second_user_id]);
                 }
                 else {
-                    Schema::create("dialog-$user_id-$second_user_id", function (Blueprint $table) {
+                    $new_dialog = new Dialog();
+                    $new_dialog->members = json_encode([$user_id, intval($second_user_id)]);
+                    $new_dialog->last_message_date = Carbon::now()->format('Y-m-d H:i:s');
+                    $new_dialog->save();
+                    Schema::create("dialog-$new_dialog->id", function (Blueprint $table) {
                         $table->id();
                         $table->text('text')->nullable();
                         $table->unsignedBigInteger('sender')->nullable(false);
@@ -33,12 +39,12 @@ class MessageController extends Controller
                     $sec_user_DB = User::where('id', $second_user_id);
                     $sec_user = $sec_user_DB->first();
                     $sec_user_messages = json_decode($sec_user->messages, true);
-                    $sec_user_messages[$user_id] = "dialog-$user_id-$second_user_id";
+                    $sec_user_messages[$user_id] = $new_dialog->id;
                     $sec_user_DB->update(['messages' => json_encode($sec_user_messages)]);
 
-                    $user_messages[$second_user_id] = "dialog-$user_id-$second_user_id";
+                    $user_messages[$second_user_id] = $new_dialog->id;
                     $cur_user_DB->update(['messages' => json_encode($user_messages)]);
-                    $dialog = DB::table("dialog-$user_id-$second_user_id");
+                    $dialog = DB::table("dialog-$new_dialog->id");
                 }
                 $messages = $dialog->get();
     
@@ -68,14 +74,20 @@ class MessageController extends Controller
         $user_id = Auth::user()->id;
         $cur_user = User::where('id', $user_id)->first();
         $user_messages = json_decode($cur_user->messages, true);
+        
         if (isset($user_messages[$second_user_id])) {
-            $dialog = DB::table($user_messages[$second_user_id]);
+            $dialog_db = Dialog::where('id', $user_messages[$second_user_id])->update([
+                'last_message_date' => Carbon::now()->format('Y-m-d H:i:s'),
+                'last_message' => $text,
+                'last_message_user' => $user_id
+            ]);
+            $dialog = DB::table('dialog-'.$user_messages[$second_user_id]);
+            $dialog->insert([
+                'text' => $text,
+                'sender' => $user_id,
+                'time' => $time
+            ]);
         }
-        $dialog->insert([
-            'text' => $text,
-            'sender' => $user_id,
-            'time' => $time
-        ]);
     }
 
     public function check_message(Request $request) {
@@ -91,7 +103,7 @@ class MessageController extends Controller
         $cur_user = User::where('id', $user_id)->first();
         $user_messages = json_decode($cur_user->messages, true);
         if (isset($user_messages[$second_user_id])) {
-            $dialog = DB::table($user_messages[$second_user_id]);
+            $dialog = DB::table('dialog-'.$user_messages[$second_user_id]);
         }
         
         $last_message = $dialog->where('sender', $second_user_id)->orderBy('id', 'desc')->first();
@@ -138,14 +150,36 @@ class MessageController extends Controller
         }
         return json_encode($data);
     }
+    
 
-    public function get_chats() {
+    public function get_chats(Request $request) {
+        function dialog_user_id($array, $key) {
+            if ($array[0] == $key) return $array[1];
+            else return $array[0];
+        }
+        $type = $request->input('type');
+        // $type = 'chat';
         $user = Auth::user();
         $user_id = $user->id;
-        $user_chats_ids = json_decode($user->chats, true);
+        if ($type == 'chat') {
+            $user_chats_ids = json_decode($user->chats, true);
+            $chats = Chat::whereIn('id', $user_chats_ids)->orderBy('last_message_date')->get();
+            foreach ($chats as $chat) {
+                $chat->user_name = User::where('id', $chat->last_message_user)->first()->name;
+            }
+            return $chats;
+        }
+        else if ($type == 'dialog') {
+            $user_messages = json_decode($user->messages, true);
+            $dialogs = Dialog::whereIn('id', array_values($user_messages))->orderBy('last_message_date')->get();
+            foreach ($dialogs as $dialog) {
+                $dialog->user_name = User::where('id', $dialog->last_message_user)->first()->name;
+                $dialog->user_id = dialog_user_id(json_decode($dialog->members, true), $user_id);
+            }
+            return $dialogs;
+        }
+
         
-        $chats = Chat::whereIn('id', $user_chats_ids)->orderBy('last_message_date')->get();
-        $user_messages = json_decode($user->messages, true);
-        return 'home';
+        
     }
 }

@@ -5,14 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Chat extends Model
+class Dialog extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
         'members',
-        'admins',
         'last_message',
         'last_message_date',
         'last_message_user'
@@ -22,5 +20,10 @@ class Chat extends Model
         'last_message' => '',
     ];
 
-    protected $table = 'chats';
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'dialogs';
 }

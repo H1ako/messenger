@@ -9,18 +9,18 @@
     <link rel="stylesheet" href="/css/message.css">
 </head>
 <body>
-    <div id='chats-area' class="chats-area">
+    <div id='messages-area'>
 
     </div>
     <div class="">
         <a href="/">Home</a>
     </div>
-    {{-- <!-- React -->
+    <!-- React -->
     <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
     <!-- JSX -->
-    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script> --}}
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
     <!-- Main -->
-    <script src='{{asset('js/message.js')}}'></script>
+    <script type='text/babel' src='{{asset('js/message.js')}}'></script>
 </body>
 </html>
