@@ -5,11 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Dialog extends Model
+class DialogList extends Model
 {
     use HasFactory;
-
-    protected $fillable = [
+    
+    protected $hidden = [
+        'user_id',
+        'second_user_id',
+        'dialog_id'
 
     ];
 
@@ -17,7 +20,7 @@ class Dialog extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function messages() {
-        return $this->hasOne(Message::class);
+    public function dialogs() {
+        return $this->hasMany(Dialog::class, 'id', 'dialog_id');
     }
 }

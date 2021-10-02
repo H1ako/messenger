@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateChatsTableF extends Migration
+class CreateFriendsListTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,12 @@ class UpdateChatsTableF extends Migration
      */
     public function up()
     {
-        Schema::table('chats', function (Blueprint $table) {
-            $table->unsignedBigInteger('last_message_user');
+        Schema::create('friends_lists', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('second_user_id');
+            $table->string('status');
+            $table->timestamps();
         });
     }
 
@@ -25,7 +29,7 @@ class UpdateChatsTableF extends Migration
      */
     public function down()
     {
-        Schema::table('chats', function (Blueprint $table) {
+        Schema::create('friends_lists', function (Blueprint $table) {
             //
         });
     }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddAdditionalFiledsToUser extends Migration
+class CreateChatTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,12 @@ class AddAdditionalFiledsToUser extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->json('chats');
+        Schema::create('chats', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->json('members');
+            $table->json('admins');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +29,8 @@ class AddAdditionalFiledsToUser extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('chats');
+        Schema::create('chats', function (Blueprint $table) {
+            //
         });
     }
 }

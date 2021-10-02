@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateDialogsTable extends Migration
+class UpdateUser extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class UpdateDialogsTable extends Migration
      */
     public function up()
     {
-        Schema::table('dialogs', function (Blueprint $table) {
-            $table->unsignedBigInteger('last_message_user');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('messages');
+            $table->dropColumn('chats');
         });
     }
 
@@ -25,7 +26,7 @@ class UpdateDialogsTable extends Migration
      */
     public function down()
     {
-        Schema::table('dialogs', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             //
         });
     }

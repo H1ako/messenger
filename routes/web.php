@@ -9,6 +9,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
+use App\Models\ChatList;
 
 
 function new_user() {
@@ -31,11 +32,11 @@ Route::get('/login', function () {
 
     
     // $new_user = new User();
-    // $new_user->name = 'Oleg';
-    // $new_user->email = 's';
+    // $new_user->name = 'Egor';
+    // $new_user->email = 'sd';
     // $new_user->password = md5('25256789');
     // $new_user->save();
-    // $user = User::where('Name', 'Nikita')->update(['chats' => json_encode([$chat->id])]);
+    // $user = User::where('Name', 'Egor')->first();
     // Schema::create("friendsList-$user->id", function (Blueprint $table) {
     //     $table->id();
     //     $table->unsignedBigInteger('user_id')->nullable(false)->default(0);
@@ -50,7 +51,22 @@ Route::get('/login', function () {
     // $user_id = Auth::user()->id;
     // $user = User::where('id', $user_id)->update(['messages' => json_encode($data)]);
     // $user->save();
-    return 'login';
+
+    $user = Auth::user();
+    // $chat = new Chat();
+    // $chat->name = 'Rabotyagi';
+    // $chat->members = json_encode([$user->id]);
+    // $chat->admins = json_encode([$user->id]);
+    // $chat->save();
+    // $chatList = new ChatList();
+    // $chatList->chat_id = $chat->id;
+    // $chatList->user_id = $user->id;
+    // $chatList->role = 'admin';
+    // $chatList->save();
+    return dd([
+        $user->chatList,
+        ChatList::where('user_id', $user->id)->first()->chats->first()->messages
+    ]);
 });
 
 /* =+=+=+= Home =+=+=+= */
@@ -69,16 +85,7 @@ Route::post('/get_users', [UsersController::class, 'get_users']);
 /* =+=+=+= Friends =+=+=+= */
 Route::get('/friends', function () {
     if (Auth::check()){
-        $userID = Auth::user()->id;
-        $user_friends = DB::table("friendsList-$userID")->get();
-        foreach($user_friends as $user_friend){
-            $user_friend->user_name = User::where('id', $user_friend->user_id)->first()->name;
-        }
-        $data = [
-            'friends' => $user_friends
-        ];
-        return view('friends', $data);
-        
+        return 'friends';
     }
     return redirect('/login');
     
@@ -96,6 +103,5 @@ Route::get('/message', function() {
     
 });
 Route::get('/message/{id}', [MessageController::class, 'show_message']);
+Route::post('/message/{id}', [MessageController::class, 'new_message']);
 Route::post('/message_action/get_chats', [MessageController::class, 'get_chats']);
-Route::post('/message_action/send', [MessageController::class, 'new_message']);
-Route::post('/message_action/check', [MessageController::class, 'check_message']);

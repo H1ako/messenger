@@ -2,8 +2,18 @@ class Messages extends React.Component {
 
     state = {
         messages: [],
-        type: 'chat'
+        type: 'dialog'
     }
+
+    messageBtnClick = async (type) => {
+        await this.setState({
+            type: type
+        });
+        console.log(this.state.type)
+        await this.getMessages();
+    }
+
+
 
     getMessages = async () => {
         const data = {
@@ -33,20 +43,26 @@ class Messages extends React.Component {
 
     render() {
         return (
-            <div className='messages'>
-                {this.state.messages.map(message => 
-                    <Message 
-                    key={message.id}
-                    id={message.id}
-                    type={this.state.type}
-                    text={message.last_message}
-                    date={message.last_message_date}
-                    user={message.last_message_user}
-                    user_name={message.user_name}
-                    name={message.name}
-                    user_id={message.user_id}
-                    /> 
-                    )}
+            <div>
+                <div className="message-btns-area">
+                    <button className="message-btn" onClick={() => this.messageBtnClick('dialog')}>Dialogs</button>
+                    <button className="message-btn" onClick={() => this.messageBtnClick('chat')}>Chats</button>
+                </div>
+                <div className='messages'>
+                    {this.state.messages.map(message => 
+                        <Message 
+                        key={message.id}
+                        id={message.id}
+                        type={this.state.type}
+                        text={message.last_message}
+                        date={message.last_message_date}
+                        user={message.last_message_user}
+                        user_name={message.user_name}
+                        name={message.name}
+                        user_id={message.user_id}
+                        /> 
+                        )}
+                </div>
             </div>
         );
     }
