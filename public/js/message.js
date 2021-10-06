@@ -15,7 +15,8 @@ class Messages extends React.Component {
 
 
 
-    getMessages = async () => {
+    getMessages = async (e) => {
+        e.preventDefault();
         const data = {
             type: this.state.type
         };
@@ -61,7 +62,7 @@ class Messages extends React.Component {
                         name={message.name}
                         user_id={message.user_id}
                         /> 
-                        )}
+                    )}
                 </div>
             </div>
         );

@@ -10,14 +10,20 @@ class Dialog extends Model
     use HasFactory;
 
     protected $fillable = [
-
+        'members',
+        'last_message',
+        'last_message_date',
+        'last_message_user'
     ];
 
-    public function user() {
-        return $this->belongsTo(User::class);
-    }
+    protected $attributes = [
+        'last_message' => '',
+    ];
 
-    public function messages() {
-        return $this->hasOne(Message::class);
-    }
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'dialogs';
 }

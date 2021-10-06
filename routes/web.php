@@ -2,14 +2,11 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
-use App\Models\Chat;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\MessageController;
-use App\Http\Controllers\UsersController;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use App\Models\ChatList;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AuthController;
+
 
 
 function new_user() {
@@ -51,23 +48,13 @@ Route::get('/login', function () {
     // $user_id = Auth::user()->id;
     // $user = User::where('id', $user_id)->update(['messages' => json_encode($data)]);
     // $user->save();
+    $data = [
+        'login' => Auth::check()
+    ];
+    return view('login', $data);
+})->name('login');
+Route::post('/login', [AuthController::class, 'auth']);
 
-    $user = Auth::user();
-    // $chat = new Chat();
-    // $chat->name = 'Rabotyagi';
-    // $chat->members = json_encode([$user->id]);
-    // $chat->admins = json_encode([$user->id]);
-    // $chat->save();
-    // $chatList = new ChatList();
-    // $chatList->chat_id = $chat->id;
-    // $chatList->user_id = $user->id;
-    // $chatList->role = 'admin';
-    // $chatList->save();
-    return dd([
-        $user->chatList,
-        ChatList::where('user_id', $user->id)->first()->chats->first()->messages
-    ]);
-});
 
 /* =+=+=+= Home =+=+=+= */
 Route::get('/', function () {
@@ -79,19 +66,28 @@ Route::get('/', function () {
     }
     else return redirect('/login');
     
-});
-Route::post('/get_users', [UsersController::class, 'get_users']);
+})->name('home');
+Route::post('/get_users', [UserController::class, 'get_users']);
 
 /* =+=+=+= Friends =+=+=+= */
 Route::get('/friends', function () {
     if (Auth::check()){
-        return 'friends';
+        $userID = Auth::user()->id;
+        $user_friends = DB::table("friendsList-$userID")->get();
+        foreach($user_friends as $user_friend){
+            $user_friend->user_name = User::where('id', $user_friend->user_id)->first()->name;
+        }
+        $data = [
+            'friends' => $user_friends
+        ];
+        return view('friends', $data);
+        
     }
     return redirect('/login');
     
 });
-Route::post('/friends/get', [UsersController::class, 'get_friends']);
-Route::post('/friends/actions', [UsersController::class, 'friendAction']);
+Route::post('/friends/get', [UserController::class, 'get_friends']);
+Route::post('/friends/actions', [UserController::class, 'friendAction']);
 
 /* =+=+=+= Message =+=+=+= */
 Route::get('/message', function() {
@@ -102,6 +98,7 @@ Route::get('/message', function() {
     return redirect('/login');
     
 });
+Route::post('/message_action/get_messages', [MessageController::class, 'get_messages']);
 Route::get('/message/{id}', [MessageController::class, 'show_message']);
-Route::post('/message/{id}', [MessageController::class, 'new_message']);
 Route::post('/message_action/get_chats', [MessageController::class, 'get_chats']);
+Route::post('/message_action/send', [MessageController::class, 'new_message']);

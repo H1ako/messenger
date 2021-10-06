@@ -5,24 +5,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="_token" content="{{ csrf_token() }}">
-    <title>Home</title>
-    <link rel="stylesheet" href="/css/index.css">
+    <title>Friends</title>
+    <link rel="stylesheet" href="/css/login.css">
 </head>
 <body>
-    <button id='logOut'>Log Out</button>
-    {{$user->id}} - {{$user->name}}
-    <div id='search-area'>
+    {{$login}}
+    <div class="">
+        <a href="/">Home</a>
+    </div>
+    <div id="main-part">
 
     </div>
-    {{-- <div class="">
-        <a href="/">Home</a>
-    </div> --}}
+    
     <!-- React -->
     <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
     <!-- JSX -->
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-    <!-- Main -->
-    <script type="text/babel" src='js/index.js'></script>
+    <script type="text/babel" src='js/login.js?v=2'></script>
 </body>
 </html>
