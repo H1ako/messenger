@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateChatsTable extends Migration
+class UpdateDialogsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class CreateChatsTable extends Migration
      */
     public function up()
     {
-        Schema::create('chats', function (Blueprint $table) {
-            $table->id();
-            $table->text('name')->nullable(false);
-            $table->json('members');
-            $table->json('admins');
-            $table->timestamps();
+        Schema::table('dialogs', function (Blueprint $table) {
+            $table->index(['from_id', 'to_id']);
         });
     }
 
@@ -29,6 +25,8 @@ class CreateChatsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('chats');
+        Schema::table('dialogs', function (Blueprint $table) {
+            //
+        });
     }
 }

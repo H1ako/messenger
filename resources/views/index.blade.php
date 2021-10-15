@@ -10,19 +10,14 @@
 </head>
 <body>
     <button id='logOut'>Log Out</button>
-    {{$user->id}} - {{$user->name}}
-    <div id='search-area'>
+    {{Auth::user()}} - {{Auth::user()->id}}
+    <div id='app'>
 
     </div>
-    {{-- <div class="">
-        <a href="/">Home</a>
-    </div> --}}
-    <!-- React -->
-    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
-    <!-- JSX -->
-    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
     <!-- Main -->
-    <script type="text/babel" src='js/index.js'></script>
+    {{-- <script type="text/babel" src='js/index.js?v=2'></script> --}}
+    {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
+    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/logOut.js') }}"></script>
 </body>
 </html>

@@ -1,30 +1,13 @@
-var logout = document.getElementById('logOut');
-logout.onclick =function() {
-    const data = {
-        type: 'logOut',
-    }
-    fetch('/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json;charset=utf-8',
-            'X-CSRF-Token': document.querySelector('meta[name="_token"]').getAttribute('content')
-        },
-        body: JSON.stringify(data)
-    })
-    .then(response => response.json())
-    .then((response) => {
-        console.log(response);
-        location.replace(response);
-    })
-    .catch(err => console.log(err))
-}
+import React from 'react';
+import ReactDOM from 'react-dom';
+
 class Search extends React.Component{
 
     state = {
         users: []
     }
 
-    input_change = async (e) => {
+    input_change = async () => {
         const text = document.getElementById('search-field').value;
         const data = {
             text_field: text,
@@ -46,11 +29,12 @@ class Search extends React.Component{
 
     render () {
         return (
-            <div className='search'>
+            <div id='search-area'>
                 <input id='search-field' type='text' className='search-field' onChange={this.input_change}/>
                 <div className='search-results'>
                     {this.state.users.map(user => 
                     <SearchResult 
+                    func={this.input_change}
                     key={user.id}
                     id={user.id}
                     name={user.name}
@@ -71,7 +55,6 @@ class SearchResult extends React.Component{
             action: action,
             user_id: this.props.id
         }
-        console.log(action, this.props.id);
         await fetch('/friends/actions', {
             method: 'POST',
             headers: {
@@ -79,7 +62,10 @@ class SearchResult extends React.Component{
                 'X-CSRF-Token': document.querySelector('meta[name="_token"]').getAttribute('content')
             },
             body: JSON.stringify(data)
-        });
+        })
+        .then((response) => {
+            this.props.func();
+        })
     }
 
     render () {
@@ -89,38 +75,28 @@ class SearchResult extends React.Component{
                     <div className='main-info__name'>{this.props.name}</div>
                     <div className='main-info__id'>{this.props.id}</div>
                 </div>
-                {this.props.status == 'friend' &&
+                
                 <div className='result-btn'>
-                    <button className='user-btn btn-remove' onClick={() => this.FriendAction('removeFriend')}>Remove</button>
+                    {this.props.status == 'friend' &&
+                        <button className='user-btn btn-remove' onClick={() => this.FriendAction('removeFriend')}>Remove</button>
+                    }
+                    {this.props.status == 'request' &&
+                        <button className='user-btn btn-remove' onClick={() => this.FriendAction('removeRequest')}>Remove request</button>
+                    }
+                    {this.props.status == 'request_to_me' &&
+                        <div>
+                            <button className='user-btn btn-add' onClick={() => this.FriendAction('acceptRequest')}>Accept</button>
+                            <button className='user-btn btn-remove' onClick={() => this.FriendAction('declineRequest')}>Cancel</button>
+                        </div>
+                    }
+                    {this.props.status == 'notFriend' &&
+                        <button className='user-btn btn-add' onClick={() => this.FriendAction('addFriend')}>Add</button>
+                    }
                 </div>
-                }
-
-                {this.props.status == 'request' &&
-                <div className='result-btn'>
-                    <button className='user-btn btn-remove' onClick={() => this.FriendAction('removeRequest')}>Remove request</button>
-                </div>
-                }
-
-                {this.props.status == 'requestToMe' &&
-                <div className='result-btn'>
-                    <button className='user-btn btn-add' onClick={() => this.FriendAction('acceptRequest')}>Accept</button>
-                    <button className='user-btn btn-remove' onClick={() => this.FriendAction('declineRequest')}>Cancel</button>
-                </div>
-                }
-
-                {this.props.status == 'notFriend' &&
-                <div className='result-btn'>
-                    <button className='user-btn btn-add' onClick={() => this.FriendAction('addFriend')}>Add</button>
-                </div>
-                }
-
                 <div className='status'>{this.props.status}</div>
             </div>
         )
     }
 }
 
-ReactDOM.render(
-    <Search />,
-    document.getElementById('search-area')
-);
+export default Search;

@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 
 class AuthController extends Controller
 {
@@ -37,11 +35,6 @@ class AuthController extends Controller
                     $user->email = $email;
                     $user->password = md5($pass);
                     $user->save();
-                    Schema::create("friendsList-$user->id", function (Blueprint $table) {
-                        $table->id();
-                        $table->unsignedBigInteger('user_id')->nullable(false)->default(0);
-                        $table->string('status', 100);
-                    });
                     Auth::login($user, true);
                     return json_encode(['url' => route('home')]);
                 }
@@ -51,9 +44,6 @@ class AuthController extends Controller
         }
         else if ($type == 'logOut') {
             Auth::logout();
-            return json_encode(['url' => route('login')]);
-        }
-        else {
             return json_encode(['url' => route('login')]);
         }
     }

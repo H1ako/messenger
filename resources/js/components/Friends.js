@@ -1,7 +1,10 @@
+import React from 'react';
+
 class Friends extends React.Component{
 
     state = {
-        users: []
+        users: [],
+        check_box: this.props.check_box ? true : false
     }
 
     get_friends = async (e) => {
@@ -25,15 +28,17 @@ class Friends extends React.Component{
 
     render () {
         return (
-            <div className='friends'>
-                {this.state.users.map(user => 
-                    <Friend 
-                    key={user.id}
-                    user_id={user.user_id}
-                    name={user.name}
-                    status={user.status}
-                    /> 
+            <div id='friends-area'>
+                <form class='friends' method='post'>
+                    {this.state.users.map(user => 
+                        <Friend 
+                        key={user.id}
+                        friend_id={user.friend_id}
+                        name={user.name}
+                        status={user.status}
+                        /> 
                     )}
+                </form>
             </div>
         )
     }
@@ -48,9 +53,9 @@ class Friend extends React.Component{
     FriendAction = async (action) => {
         const data = {
             action: action,
-            user_id: this.props.user_id
+            user_id: this.props.friend_id
         }
-        console.log(action, this.props.user_id);
+        console.log(action, this.props.friend_id);
         await fetch('/friends/actions', {
             method: 'POST',
             headers: {
@@ -65,8 +70,8 @@ class Friend extends React.Component{
         return (
             <div className='friends__friend'>
                 <div className='main-info'>
-                    <a href={`/message/${this.props.user_id}`}><div className='main-info__name'>{this.props.name}</div></a>
-                    <div className='main-info__id'>{this.props.user_id}</div>
+                    <a href={`/message/${this.props.friend_id}`}><div className='main-info__name'>{this.props.name}</div></a>
+                    <div className='main-info__id'>{this.props.friend_id}</div>
                 </div>
                 {this.props.status == 'friend' &&
                 <div className='result-btn'>
@@ -80,7 +85,7 @@ class Friend extends React.Component{
                 </div>
                 }
 
-                {this.props.status == 'requestToMe' &&
+                {this.props.status == 'request_to_me' &&
                 <div className='result-btn'>
                     <button className='user-btn btn-add' onClick={() => this.FriendAction('acceptRequest')}>Accept</button>
                     <button className='user-btn btn-remove' onClick={() => this.FriendAction('declineRequest')}>Cancel</button>
@@ -93,7 +98,4 @@ class Friend extends React.Component{
     }
 }
 
-ReactDOM.render(
-    <Friends />,
-    document.getElementById('friends-area')
-);
+export default Friends;

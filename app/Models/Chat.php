@@ -9,18 +9,19 @@ class Chat extends Model
 {
     use HasFactory;
 
+    protected $table = 'chats';
+
     protected $fillable = [
         'name',
-        'members',
-        'admins',
         'last_message',
-        'last_message_date',
         'last_message_user'
     ];
 
-    protected $attributes = [
-        'last_message' => '',
-    ];
+    public function members() {
+        return $this->hasMany(ChatMember::class, 'chat_id');
+    }
 
-    protected $table = 'chats';
+    public function messages() {
+        return $this->hasMany(ChatMessage::class, 'chat_id');
+    }
 }

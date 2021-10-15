@@ -3,9 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
 
-class UpdateChatsTable extends Migration
+class UpdateChatMembersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +13,8 @@ class UpdateChatsTable extends Migration
      */
     public function up()
     {
-        Schema::table('chats', function (Blueprint $table) {
-            $table->dateTime('last_message_date');
+        Schema::table('chat_members', function (Blueprint $table) {
+            $table->foreign('chat_id')->references('id')->on('chats')->onDelete('cascade');
         });
     }
 
@@ -26,8 +25,8 @@ class UpdateChatsTable extends Migration
      */
     public function down()
     {
-        Schema::table('chats', function (Blueprint $table) {
-            $table->dropColumn('last_message_date');
+        Schema::table('chat_members', function (Blueprint $table) {
+            //
         });
     }
 }

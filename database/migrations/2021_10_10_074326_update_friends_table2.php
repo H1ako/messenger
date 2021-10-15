@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateUserFields extends Migration
+class UpdateFriendsTable2 extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class UpdateUserFields extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->json('messages');
+        Schema::table('friends', function (Blueprint $table) {
+            $table->index(['user_id', 'friend_id', 'status']);
         });
     }
 
@@ -25,8 +25,8 @@ class UpdateUserFields extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('messages');
+        Schema::table('friends', function (Blueprint $table) {
+            //
         });
     }
 }

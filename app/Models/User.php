@@ -33,11 +33,6 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    protected $attributes = [
-        'messages' => '{}',
-        'chats' => '[]'
-    ];
-
     /**
      * The attributes that should be cast.
      *
@@ -46,4 +41,16 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function friends() {
+        return $this->hasMany(Friend::class, 'user_id', 'id')->orderBy('updated_at', 'asc');
+    }
+
+    public function dialogs() {
+        return $this->hasMany(DialogMember::class, 'from_id', 'id')->orderBy('updated_at', 'asc');
+    }
+
+    public function chats() {
+        return $this->hasMany(ChatMember::class, 'user_id', 'id')->orderBy('updated_at', 'asc');
+    }
 }

@@ -1,0 +1,6 @@
+.modal-friends {
+  display: none;
+}
+.modal-friends.active {
+  display: block;
+}

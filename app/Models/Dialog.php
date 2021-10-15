@@ -10,14 +10,8 @@ class Dialog extends Model
     use HasFactory;
 
     protected $fillable = [
-        'members',
         'last_message',
-        'last_message_date',
         'last_message_user'
-    ];
-
-    protected $attributes = [
-        'last_message' => '',
     ];
 
     /**
@@ -26,4 +20,12 @@ class Dialog extends Model
      * @var string
      */
     protected $table = 'dialogs';
+
+    public function members() {
+        return $this->hasMany(DialogMember::class, 'dialog_id')->orderBy('from_id');
+    }
+
+    public function messages() {
+        return $this->hasMany(DialogMessage::class, 'dialog_id')->orderBy('created_at');
+    }
 }

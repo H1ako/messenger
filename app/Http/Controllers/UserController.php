@@ -3,22 +3,22 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Friend;
 
 class UserController extends Controller
 {
     public function get_users(Request $request) {
-        $cur_user_id = Auth::user()->id;
+        $cur_user = Auth::user();
         $text = $request->input('text_field');
         if ($text != '') {
-            $users = User::where('id', '!=' , Auth::user()->id)->where('name', 'like', "$text%")->get();
+            $users = User::where('id', '!=' , $cur_user->id)->where('name', 'like', "%$text%")->get();
 
             foreach ($users as $user) {
-                $is_friend = DB::table("friendsList-$cur_user_id")->where('user_id', $user->id)->first();
+                $friend = Friend::where('user_id', $cur_user->id)->where('friend_id', $user->id)->first();
     
-                if ($is_friend) $user->status = $is_friend->status;
+                if ($friend) $user->status = $friend->status;
                 else $user->status = 'notFriend';
             }
             return json_encode($users);
@@ -27,45 +27,56 @@ class UserController extends Controller
     }
 
     public function get_friends(Request $request) {
-        $cur_user_id = Auth::user()->id;
+        $cur_user = Auth::user();
         $type = $request->input('type');
-        $type = 'friend';
-        $friends = DB::table("friendsList-$cur_user_id")->where('status', $type)->get();
+        $friends = $cur_user->friends->where('status', $type);
 
         foreach ($friends as $friend) {
-            $friend->name = User::where('id', $friend->user_id)->first()->name;
+            $friend->name = User::where('id', $friend->friend_id)->first()->name;
         }
         return json_encode($friends);
-        // return $data;
     }
 
     public function friendAction(Request $request) {
-        $cur_user_id = Auth::user()->id;
+        $cur_user = Auth::user();
         $user_id = $request->input('user_id');
         $action = $request->input('action');
 
         if ($action === 'removeFriend' || $action === 'removeRequest' || $action === 'declineRequest') {
-            DB::table("friendsList-$user_id")->where('user_id', $cur_user_id)->delete();
-            DB::table("friendsList-$cur_user_id")->where('user_id', $user_id)->delete();
+            $friends = Friend::whereIn('user_id', [$cur_user->id, $user_id])
+                            ->whereIn('friend_id', [$cur_user->id, $user_id])
+                            ->get();
+            foreach ($friends as $friend) {
+               $friend->delete(); 
+            }
         }
 
         else if ($action === 'addFriend') {
-            DB::table("friendsList-$user_id")->insert([
-                'user_id' => $cur_user_id,
-                'status' => 'requestToMe'
-            ]);
-            DB::table("friendsList-$cur_user_id")->insert([
-                'user_id' => $user_id,
-                'status' => 'request'
-            ]);
+            $data = [
+                [
+                    'user_id' => $cur_user->id,
+                    'friend_id' => $user_id,
+                    'status' => 'request'
+                ],
+                [
+                    'user_id' => $user_id,
+                    'friend_id' => $cur_user->id,
+                    'status' => 'request_to_me'
+                ]
+
+            ];
+            Friend::insert($data);
         }
 
         else if ($action === 'acceptRequest') {
-            DB::table("friendsList-$user_id")->where('user_id', $cur_user_id)
-                ->update(['status' => 'friend']);
-            DB::table("friendsList-$cur_user_id")->where('user_id', $user_id)
-                ->update(['status' => 'friend']);
-
+            $friends = Friend::whereIn('user_id', [$cur_user->id, $user_id])
+                            ->whereIn('friend_id', [$cur_user->id, $user_id])
+                            ->get();
+            
+            foreach ($friends as $friend) {
+               $friend->status = 'friend';
+               $friend->save();
+            }
         }
     }
 }

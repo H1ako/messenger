@@ -9,19 +9,16 @@
     <link rel="stylesheet" href="/css/login.css">
 </head>
 <body>
-    {{$login}}
+    {{Auth::user()}}
     <div class="">
         <a href="/">Home</a>
     </div>
-    <div id="main-part">
+    <div id="app">
 
     </div>
     
-    <!-- React -->
-    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
-    <!-- JSX -->
-    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-    <script type="text/babel" src='js/login.js?v=2'></script>
+    {{-- <script type="text/babel" src='js/login.js?v=2'></script> --}}
+    {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
+    <script src="{{ asset('js/app.js') }}"></script>
 </body>
 </html>

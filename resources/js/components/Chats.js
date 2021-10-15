@@ -1,24 +1,22 @@
-class Messages extends React.Component {
+import React from 'react';
+
+class Chats extends React.Component {
 
     state = {
         messages: [],
-        type: 'dialog'
+        message_type: 'dialog',
     }
 
-    messageBtnClick = async (type) => {
+    messageBtnClick = async (message_type) => {
         await this.setState({
-            type: type
+            message_type: message_type
         });
-        console.log(this.state.type)
         await this.getMessages();
     }
 
-
-
     getMessages = async (e) => {
-        e.preventDefault();
         const data = {
-            type: this.state.type
+            message_type: this.state.message_type
         };
         await fetch('/message_action/get_chats', {
             method: 'POST',
@@ -45,42 +43,43 @@ class Messages extends React.Component {
     render() {
         return (
             <div>
-                <div className="message-btns-area">
-                    <button className="message-btn" onClick={() => this.messageBtnClick('dialog')}>Dialogs</button>
-                    <button className="message-btn" onClick={() => this.messageBtnClick('chat')}>Chats</button>
-                </div>
-                <div className='messages'>
-                    {this.state.messages.map(message => 
-                        <Message 
-                        key={message.id}
-                        id={message.id}
-                        type={this.state.type}
-                        text={message.last_message}
-                        date={message.last_message_date}
-                        user={message.last_message_user}
-                        user_name={message.user_name}
-                        name={message.name}
-                        user_id={message.user_id}
-                        /> 
-                    )}
+                <div id='chats'>
+                    <div className="message-btns-area">
+                        <button className="message-btn" onClick={() => this.messageBtnClick('dialog')}>Dialogs</button>
+                        <button className="message-btn" onClick={() => this.messageBtnClick('chat')}>Chats</button>
+                    </div>
+                    <div className='messages'>
+                        {this.state.messages.map(message => 
+                            <Chat 
+                            key={message.id}
+                            id={message.chat_id}
+                            type={this.state.message_type}
+                            text={message.last_message}
+                            user_name={message.user_name}
+                            last_message_user={message.last_message_user}
+                            mess_id={message.mess_id}
+                            chat_name={message.name}
+                            user_id={message.to_id}
+                            /> 
+                        )}
+                    </div>
                 </div>
             </div>
         );
     }
 }
 
-class Message extends React.Component {
+class Chat extends React.Component {
     render() {
         if (this.props.type == 'chat') {
             return (
                 <div className='message'>
                     <a href={`/message/${this.props.id}?chat`}>
-                        <div className='message__name'>{this.props.name}</div>
+                        <div className='message__name'>{this.props.chat_name}</div>
                     </a>
                     <div className='message__content'>
                         <div className='message__user-name'>{this.props.user_name}</div>
                         <div className='message__user-message'>
-                            <span className='message__date'>{this.props.date}</span>
                             <span className='message__text'>{this.props.text}</span>
                         </div>
                     </div>
@@ -96,7 +95,6 @@ class Message extends React.Component {
                         <div className='message__name'>{this.props.user_name}</div>
                     </a>
                     <div className='message__content'>
-                        <span className='message__date'>{this.props.date}</span>
                         <span className='message__text'>{this.props.text}</span>
                     </div>
                 </div>
@@ -106,7 +104,4 @@ class Message extends React.Component {
     }
 }
 
-ReactDOM.render(
-    <Messages />,
-    document.getElementById('messages-area')
-);
+export default Chats;

@@ -6,15 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="_token" content="{{ csrf_token() }}">
     <title>Messages</title>
-    <link rel="stylesheet" href="/css/message_user.css">
+    <link rel="stylesheet" href="/css/chats.css">
 </head>
 <body>
     <div id="app">
         
     </div>
+    <a href="/">Home</a>
     <!-- Main -->
-    {{-- <script type='text/babel' src='{{asset('js/message_user.js')}}'></script> --}}
-    {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
+    {{-- <script type='text/babel' src='{{asset('js/message.js')}}'></script> --}}
     <script src="{{ asset('js/app.js') }}"></script>
 </body>
 </html>

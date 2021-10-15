@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateChatTable extends Migration
+class CreateChatsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,12 @@ class UpdateChatTable extends Migration
      */
     public function up()
     {
-        Schema::table('chats', function (Blueprint $table) {
-            $table->text('last_message');
+        Schema::create('chats', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->text('last_message')->nullable();
+            $table->unsignedBigInteger('last_message_user')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -25,8 +29,6 @@ class UpdateChatTable extends Migration
      */
     public function down()
     {
-        Schema::table('chats', function (Blueprint $table) {
-            $table->dropColumn('last_message');
-        });
+        Schema::dropIfExists('chats');
     }
 }

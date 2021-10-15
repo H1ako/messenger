@@ -1,3 +1,6 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+
 class Login extends React.Component {
     state = {
         type: 'login',
@@ -22,6 +25,7 @@ class Login extends React.Component {
                 second_pass: event.target.second_pass.value
             }
         }
+        console.log(type);
         await fetch('/login', {
             method: 'POST',
             headers: {
@@ -42,7 +46,7 @@ class Login extends React.Component {
 
     render () {
         return (
-            <div>
+            <div id='login-form'>
                 <div className='btns-area'>
                     <button className='btns-area__btn btn-login' onClick={() => this.setState({type: 'login'})}>Log In</button>
                     <button className='btns-area__btn btn-register' onClick={() => this.setState({type: 'register'})}>Sign Up</button>
@@ -68,7 +72,4 @@ class Login extends React.Component {
     }
 }
 
-ReactDOM.render(
-    <Login />,
-    document.getElementById('main-part')
-);
+export default Login;

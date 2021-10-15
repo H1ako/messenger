@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateDialogsTable extends Migration
+class DropColumnsDialogsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class UpdateDialogsTable extends Migration
     public function up()
     {
         Schema::table('dialogs', function (Blueprint $table) {
-            $table->unsignedBigInteger('last_message_user');
+            $table->dropColumn('from_id', 'to_id');
         });
     }
 
