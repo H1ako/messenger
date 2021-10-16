@@ -63,24 +63,32 @@ class Messages extends React.Component {
     }
 
     componentDidMount() {
+        let id = this.getCookie('messages_id');
+        let type = this.getCookie('message_type');
         this.setState({
             cur_user_id: this.getCookie('cur_user_id'),
         });
         this.getMessages()
-        window.Echo.private(`dialog.${dialog_id}`)
+        if (type == 'dialog') {
+            window.Echo.private(`dialog.${id}`)
             .listen('MessageSend', (e) => {
                 e.message.sender_name = e.user.name;
                 this.setState({
                     messages: [...this.state.messages, e.message]
                 })
             });
-        // window.Echo.private(`chat.${chat_id}`)
-        // .listen('ChatMessageSend', (e) => {
-        //     e.message.sender_name = e.user.name;
-        //     this.setState({
-        //         messages: [...this.state.messages, e.message]
-        //     })
-        // });
+        }
+        else if (type == 'chat') {
+            window.Echo.private(`chat.${id}`)
+            .listen('ChatMessageSend', (e) => {
+                e.message.sender_name = e.user.name;
+                this.setState({
+                    messages: [...this.state.messages, e.message]
+                })
+            });
+        }
+        
+        
 
     }
 

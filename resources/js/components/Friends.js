@@ -29,7 +29,7 @@ class Friends extends React.Component{
     render () {
         return (
             <div id='friends-area'>
-                <form class='friends' method='post'>
+                <form className='friends' method='post'>
                     {this.state.users.map(user => 
                         <Friend 
                         key={user.id}

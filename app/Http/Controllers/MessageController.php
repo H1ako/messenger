@@ -42,6 +42,8 @@ class MessageController extends Controller
             Cookie::queue('message_type', $message_type, time()+3600);
             Cookie::queue('messages_id', $messages_id, time()+3600);
             setcookie('cur_user_id', $cur_user->id, time()+3600);
+            setcookie('messages_id', $messages_id, time()+3600);
+            setcookie('message_type', $message_type, time()+3600);
             return view('message_user');           
         }
         else return redirect('/login');
@@ -92,11 +94,21 @@ class MessageController extends Controller
     }
 
     public function new_chat(Request $req) {
-        $chosen_friends = $req->input('choosen_friends');
+        $chosen_friends = $req->input('chosen_friends');#json_decode($req->input('chosen_friends'));
+        $chat_name = $req->input('chat_name');
         $cur_user = Auth::user();
-        foreach ($chosen_friends as $friend) {
-            User::find();
+        if ($chat_name != '') {
+            $new_chat = new Chat(['name' => $chat_name]);
+            $new_chat->save();
+            $new_chat->members()->create(['user_id' => $cur_user->id, 'role' => 'creator']);
+            foreach ($chosen_friends as $friend) {
+                $new_chat->members()->create(['user_id' => $friend, 'role' => 'member']);
+            }
+            // $red_url = redirect() "{url: }"
+            // return "/messages/$new_chat->id?chat";
+            return json_encode(['url' => route('messages', [$new_chat->id]).'?chat']);
         }
+        
     }
 
     public function get_messages() {

@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="/css/friends.css">
 </head>
 <body>
-    <div id="apps">
+    <div id="app">
 
     </div>
     {{-- <script type="text/babel" src='js/friends.js?v=2'></script> --}}
