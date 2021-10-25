@@ -1,3 +1,4 @@
+import { filter } from 'lodash';
 import React from 'react';
 
 class Messages extends React.Component {
@@ -31,35 +32,36 @@ class Messages extends React.Component {
     }
 
     sendMessage = async () => {
-        console.log('send message');
-        let input = document.getElementById('new_message_text');
+        let input = document.getElementById('new_message_text')
         let input_value = input.value;
-        let time = new Date().toLocaleString();
-        let data = {
-            message_text: input_value,
+        console.log(filter(input_value))
+        if (filter(input_value) != '') {
+            let full_time = new Date();
+            let time = `${full_time.getHours()}:${full_time.getMinutes()}`
+            let data = {
+                message_text: input_value,
+            }
+            input.value = '';
+            this.setState({
+                messages: [...this.state.messages, {
+                    id: `user_mess_${full_time}`,
+                    text: input_value,
+                    from_id: this.state.cur_user_id,
+                    created_at: time
+                }]
+            })
+            
+            await fetch('/message_action/send', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8',
+                    'X-CSRF-Token': document.querySelector('meta[name="_token"]').getAttribute('content'),
+                    "X-Socket-Id": window.Echo.socketId(),
+                },
+                body: JSON.stringify(data)
+            })
         }
-        input.value = '';
-        this.setState({
-            messages: [...this.state.messages, {
-                id: `user_mess_${time}`,
-                text: input_value,
-                from_id: this.state.cur_user_id,
-                created_at: time
-            }]
-        })
         
-
-        
-
-        await fetch('/message_action/send', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8',
-                'X-CSRF-Token': document.querySelector('meta[name="_token"]').getAttribute('content'),
-                "X-Socket-Id": window.Echo.socketId(),
-            },
-            body: JSON.stringify(data)
-        })
     }
 
     componentDidMount() {
@@ -68,6 +70,7 @@ class Messages extends React.Component {
         this.setState({
             cur_user_id: this.getCookie('cur_user_id'),
         });
+        console.log(id, type)
         this.getMessages()
         if (type == 'dialog') {
             window.Echo.private(`dialog.${id}`)

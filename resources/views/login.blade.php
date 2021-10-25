@@ -6,19 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="_token" content="{{ csrf_token() }}">
     <title>Friends</title>
-    <link rel="stylesheet" href="/css/login.css">
+    <link rel="stylesheet" href="/css/app.css">
 </head>
 <body>
-    {{Auth::user()}}
-    <div class="">
-        <a href="/">Home</a>
-    </div>
-    <div id="app">
-
-    </div>
-    
-    {{-- <script type="text/babel" src='js/login.js?v=2'></script> --}}
-    {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
-    <script src="{{ asset('js/app.js') }}"></script>
+    {{Auth::user()->id}}
+    <div id='app'></div>
+    <?php $now = new DateTime();?>
+    <script src="{{ asset('js/app.js') }}?<?=$now->format('H:i:s')?>"></script>
 </body>
 </html>

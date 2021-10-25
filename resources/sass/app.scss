@@ -1,0 +1,270 @@
+@import 'normalize.scss';
+@import '_variables.scss';
+
+/* =+=+=+= Common =+=+=+= */
+*,
+*::after,
+*::before {
+    box-sizing: border-box;
+}
+body {
+    background: $color-body-bg;
+    color: $color-text;
+    font-family: $font-family-sans-serif;
+    font-weight: 400;
+}
+
+/* =+=+=+= Header =+=+=+= */
+header {
+    z-index: 999;
+    position: fixed;
+    display: flex;
+    background: $color-header-bg;
+    width: 100%;
+    padding-block: 20px;
+    max-height: 100px;
+
+    .header-menu{
+        margin: auto;
+        background: $color-btn-bg;
+        height: 60px;
+        width: 60%;
+        overflow: hidden;
+        border-radius: 45px;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        transition: height .3s;
+
+        &.active{
+            .menu-arrow{
+                transform: rotateX(-180deg);
+            }
+        }
+
+        &__firstBar{
+            padding: 15px;
+            position: relative;
+            height: 60px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+
+            &::after{
+                content: '';
+                border-radius: 10px;
+                position: absolute;
+                background: $color-menu-line;
+                top: calc(100% + 1px);
+                left: 10%;
+                width: 80%;
+                height: 5px;
+            }
+
+            .menu-arrow{
+                width: 20px;
+                height: 20px;
+                transition: .3s;
+            }
+
+            .menu-pageName{
+                display: flex;
+                align-items: center;
+                img {
+                    width: 30px;
+                    height: 30px;
+                    margin-right: 5px;
+                }
+                h1{font-size: 30px;}
+                &__pic{
+                    width: 30px;
+                    height: 30px;
+                    background: white;
+                    border-radius: 50%;
+                    margin-right: 5px;
+                }
+            }
+
+            .menu-profile{
+                display: flex;
+                align-items: center;
+                &__name{
+                    font-size: 18px;
+                    transform: translateY(6px);
+                    margin-right: 5px;
+                }
+                &__pic{
+                    background: white;
+                    width: 45px;
+                    height: 45px;
+                    border-radius: 50%;
+                }
+            }
+        }
+
+        nav {
+            position: relative;
+            display: flex;
+            width: 100%;
+            flex-direction: column;
+            align-items: flex-end;
+            padding-inline: 10%;
+            z-index: 10;
+            padding-block: 16px;
+            
+            a {
+                text-decoration: none;
+                color: white;
+            }
+
+            .nav__link{
+                margin-top: 10px;
+                height: 50px;
+                position: relative;
+                display: flex;
+                align-items: center;
+                background: $color-btn-bg;
+                padding-left: 5px;
+                transition: .15s;
+                cursor: pointer;
+
+                &::before{
+                    border-radius: 10px;
+                    content: '';
+                    position: absolute;
+                    background: $color-menu-line;
+                    top: 66%;
+                    right: 0;
+                    width: 48vw;
+                    height: 5px;
+                    z-index: -1;
+                }
+
+                img{
+                    width: 30px;
+                    height: 30px;
+                    margin-right: 5px;
+                }
+                h1{
+                    font-size: 25px;
+                }
+            }
+        }
+    }
+}
+
+/* =+=+=+= Main =+=+=+= */
+main {
+    display: flex;
+    position: relative;
+    background: $color-main-bg;
+    width: 60%;
+    margin: 0 auto;
+    min-height: 100vh;
+    padding-block: clamp(19vh, 190px, 20vh) clamp(5vh, 50px, 6vh);
+
+    .search-area{
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        .search-field{
+            width: 80%;
+            height: 60px;
+            border-radius: 45px;
+            padding-left: 30px;
+            padding-top: 5px;
+            font-size: 18px;
+            background-color: $color-btn-bg;
+            border: none;
+            outline: none;
+            color: $color-text;
+
+            &::placeholder {
+                background: url('/images/icons/search.svg') no-repeat center left;
+                padding-left: 35px;
+                background-size: 30px 30px;
+                color: $color-text;
+                font-family: $font-family-sans-serif;
+                font-weight: 400;
+                font-size: 20px;
+
+            }
+        }
+
+        .search-results{
+            margin-top: 30px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            width: 90%;
+            align-items: center;
+            .search-result{
+                margin-top: 15px;
+                position: relative;
+                width: 100%;
+                height: 80px;
+                border-radius: 45px;
+                background: $color-field-bg;
+                padding: 20px 30px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                .main-info{
+                    display: flex;
+                    align-items: center;
+                    &__pic{
+                        width: 40px;
+                        height: 40px;
+                        background: white;
+                        border-radius: 50%;
+                    }
+                    &__name{
+                        font-size: 24px;
+                        margin-left: 5px;
+                        transform: translateY(6px);
+                    }
+                }
+                .result-btn{
+                    display: flex;
+                    align-items: center;
+
+                    .user-btn{
+                        cursor: pointer;
+                        background: $color-btn-bg;
+                        outline: none;
+                        border: none;
+                        padding: 6px 15px;
+                        border-radius: 25px;
+                        color: white;
+                        font-size: 18px;
+
+                        &:nth-child(2) {
+                            margin-right: 5px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+.modal-friends {
+    display: none;
+
+    &.active {
+        display: flex;
+    }
+}
+
+.message-area__message{
+    color: green;
+}
+
+.user-message{
+    color: red;
+}

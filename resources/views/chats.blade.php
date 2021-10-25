@@ -6,15 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="_token" content="{{ csrf_token() }}">
     <title>Messages</title>
-    <link rel="stylesheet" href="/css/chats.css">
+    <link rel="stylesheet" href="/css/app.css">
 </head>
 <body>
-    <div id="app">
-        
-    </div>
-    <a href="/">Home</a>
-    <!-- Main -->
-    {{-- <script type='text/babel' src='{{asset('js/message.js')}}'></script> --}}
-    <script src="{{ asset('js/app.js') }}"></script>
+    <div id='app'></div>
+    <?php $now = new DateTime();?>
+    <script src="{{ asset('js/app.js') }}?<?=$now->format('H:i:s')?>"></script>
 </body>
 </html>

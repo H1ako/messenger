@@ -29,8 +29,8 @@ class Search extends React.Component{
 
     render () {
         return (
-            <div id='search-area'>
-                <input id='search-field' type='text' className='search-field' onChange={this.input_change}/>
+            <div className='search-area' id='search-area'>
+                <input id='search-field' type='text' className='search-field' placeholder='Search' onChange={this.input_change}/>
                 <div className='search-results'>
                     {this.state.users.map(user => 
                     <SearchResult 
@@ -72,8 +72,8 @@ class SearchResult extends React.Component{
         return (
             <div className='search-result'>
                 <div className='main-info'>
+                    <div className='main-info__pic'></div>
                     <div className='main-info__name'>{this.props.name}</div>
-                    <div className='main-info__id'>{this.props.id}</div>
                 </div>
                 
                 <div className='result-btn'>
@@ -93,7 +93,6 @@ class SearchResult extends React.Component{
                         <button className='user-btn btn-add' onClick={() => this.FriendAction('addFriend')}>Add</button>
                     }
                 </div>
-                <div className='status'>{this.props.status}</div>
             </div>
         )
     }

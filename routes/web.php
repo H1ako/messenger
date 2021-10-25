@@ -51,5 +51,6 @@ Route::get('/message', function() {
 Route::post('/message_action/get_messages', [MessageController::class, 'get_messages']);
 Route::get('/message/{id}', [MessageController::class, 'show_message'])->name('messages');
 Route::post('/message_action/get_chats', [MessageController::class, 'get_chats']);
+Route::post('/message_action/get_message_info', [MessageController::class, 'get_message_info']);
 Route::post('/message_action/create_chat', [MessageController::class, 'new_chat']);
 Route::post('/message_action/send', [MessageController::class, 'new_message']);

@@ -26,11 +26,14 @@
     },
     "dependencies": {
         "browser-sync": "^2.27.5",
+        "file-loader": "^6.2.0",
         "gulp": "^4.0.2",
         "gulp-sass": "^5.0.0",
         "laravel-echo": "^1.11.2",
         "pusher-js": "^7.0.3",
         "react-router": "^3.2.0",
-        "sass": "^1.41.1"
+        "react-router-dom": "^5.3.0",
+        "sass": "^1.41.1",
+        "url-loader": "^4.1.1"
     }
 }
