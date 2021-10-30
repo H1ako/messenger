@@ -7,7 +7,6 @@ class Login extends React.Component {
     }
 
     login = async (event, type='login') => {
-        const form = document.getElementById('form-login');
         if (type == 'login') {
             var data = {
                 type: 'login',
@@ -45,24 +44,24 @@ class Login extends React.Component {
 
     render () {
         return (
-            <div id='login-form'>
+            <div className='login-area' id='login-area'>
                 <div className='btns-area'>
-                    <button className='btns-area__btn btn-login' onClick={() => this.setState({type: 'login'})}>Log In</button>
+                    <button className='btns-area__btn btn-login' onClick={() => this.setState({type: 'login'})}>Sign In</button>
                     <button className='btns-area__btn btn-register' onClick={() => this.setState({type: 'register'})}>Sign Up</button>
                 </div>
                 {this.state.type == 'login' &&
                 <form onSubmit={(e) => this.login(e, 'login')} className='form-login' id='form-login'>
-                    <input type='email' name='email' className='form-login__part' placeholder='email'/>
-                    <input type='password' name='first_pass' className='form-login__part' placeholder='password'/>
-                    <input type='submit' className='form-login__submit' value='Log In'/>
+                    <input type='email' name='email' className='form-login__part email' placeholder='Email'/>
+                    <input type='password' name='first_pass' className='form-login__part pass1' placeholder='Password'/>
+                    <input type='submit' className='form-login__submit' value='Sign In'/>
                 </form>
                 }
                 {this.state.type == 'register' &&
                 <form onSubmit={(e) => this.login(e, 'register')} className='form-login' id='form-login'>
-                    <input type='text' name='name' className='form-login__part' placeholder='Name'/>
-                    <input type='email' name='email' className='form-login__part' placeholder='email'/>
-                    <input type='password' name='first_pass' className='form-login__part' id='first_pass' placeholder='password'/>
-                    <input type='password' name='second_pass' className='form-login__part' id='second_pass' placeholder='password again'/>
+                    <input type='text' name='name' className='form-login__part name' placeholder='Name'/>
+                    <input type='email' name='email' className='form-login__part email' placeholder='Email'/>
+                    <input type='password' name='first_pass' className='form-login__part pass1' id='first_pass' placeholder='Password'/>
+                    <input type='password' name='second_pass' className='form-login__part pass2' id='second_pass' placeholder='Password Again'/>
                     <input type='submit' className='form-login__submit' value='Sign Up'/>
                 </form>
                 }

@@ -7,9 +7,9 @@ class Friends extends React.Component{
         check_box: this.props.check_box ? true : false
     }
 
-    get_friends = async (e) => {
+    get_friends = async (type='friend') => {
         const data = {
-            type: 'friend',
+            type: type,
         }
         await fetch('/friends/get', {
             method: 'POST',
@@ -21,14 +21,20 @@ class Friends extends React.Component{
         })
         .then(response => response.json())
         .then((response) => {
-            if (response) this.setState({users: response});
+            console.log("response: " + response)
+            this.setState({users: response})
         })
         .catch(err => console.log(err))
     }
 
     render () {
+        console.log(this.state.users)
         return (
-            <div id='friends-area'>
+            <div id='friends-area' className='friends-area'>
+                <div className='btns-area'>
+                    <button className='btns-area__btn' onClick={() => this.get_friends()}>Friends</button>
+                    <button className='btns-area__btn' onClick={() => this.get_friends("request")}>Requests</button>
+                </div>
                 <form className='friends' method='post'>
                     {this.state.users.map(user => 
                         <Friend 
@@ -44,7 +50,7 @@ class Friends extends React.Component{
     }
 
     componentDidMount() {
-        this.get_friends();
+        this.get_friends()
     }
 }
 
@@ -69,10 +75,10 @@ class Friend extends React.Component{
     render () {
         return (
             <div className='friends__friend'>
-                <div className='main-info'>
-                    <a href={`/message/${this.props.friend_id}`}><div className='main-info__name'>{this.props.name}</div></a>
-                    <div className='main-info__id'>{this.props.friend_id}</div>
-                </div>
+                <a href={`/message/${this.props.friend_id}`} className='main-info'>
+                    <div className='main-info__pic'></div>
+                    <div className='main-info__name'>{this.props.name}</div>
+                </a>
                 {this.props.status == 'friend' &&
                 <div className='result-btn'>
                     <button className='user-btn btn-remove' onClick={() => this.FriendAction('removeFriend')}>Remove</button>
@@ -91,8 +97,6 @@ class Friend extends React.Component{
                     <button className='user-btn btn-remove' onClick={() => this.FriendAction('declineRequest')}>Cancel</button>
                 </div>
                 }
-
-                <div className='status'>{this.props.status}</div>
             </div>
         )
     }

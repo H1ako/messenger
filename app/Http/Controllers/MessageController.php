@@ -31,7 +31,10 @@ class MessageController extends Controller
         else if ($message_type == 'chat') {
             $message_name = Chat::find($messages_id)->name;
         }
-        return json_encode(['message_name' => $message_name]);
+        return json_encode([
+            'message_name' => $message_name,
+            'user' => $cur_user
+        ]);
     }
 
     public function show_message($messages_id) {

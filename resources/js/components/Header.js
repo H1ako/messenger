@@ -5,6 +5,7 @@ class NavLink extends React.Component {
         if (this.props.type == 'home') return (<a href='/'><div className='nav__link'><img src='../images/icons/home.svg'/><h1>Home</h1></div></a>)
         else if (this.props.type == 'messages') return (<a href='/message'><div className='nav__link'><img src='../images/icons/messages.svg'/><h1>Messages</h1></div></a>)
         else if (this.props.type == 'friends') return (<a href='/friends'><div className='nav__link'><img src='../images/icons/friends.svg'/><h1>Friends</h1></div></a>)
+        else return (<></>)
     }
 }
 class PageName extends React.Component {
@@ -13,6 +14,7 @@ class PageName extends React.Component {
         else if (this.props.type == 'messages') return (<div className='menu-pageName'><img src='../images/icons/messages.svg'/><h1>Messages</h1></div>)
         else if (this.props.type == 'friends') return (<div className='menu-pageName'><img src='../images/icons/friends.svg'/><h1>Friends</h1></div>)
         else if (this.props.type == 'messages_id') return (<div className='menu-pageName'><div className='menu-pageName__pic'></div><h1>{this.props.name}</h1></div>)
+        else return (<></>)
     }
 }
 
@@ -20,7 +22,8 @@ class Header extends React.Component {
 
     state = {
         menu_open: false,
-        message_name: ''
+        message_name: '',
+        user: {}
     }
 
     signOut = async () => {
@@ -58,24 +61,28 @@ class Header extends React.Component {
     }
 
     componentDidMount() {
-        if (this.props.cur_url == 'messages_id') {
-            fetch('/message_action/get_message_info', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json;charset=utf-8',
-                    'X-CSRF-Token': document.querySelector('meta[name="_token"]').getAttribute('content')
+        fetch('/message_action/get_message_info', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+                'X-CSRF-Token': document.querySelector('meta[name="_token"]').getAttribute('content')
+            }
+        })
+        .then(response => response.json())
+        .then((response) => {
+            let dict = {}
+            if (this.props.cur_url == 'messages_id') {
+                dict = {
+                    message_name: response.message_name,
+                    user: response.user
                 }
-            })
-            .then(response => response.json())
-            .then((response) => {
-                console.log(response)
-                this.setState({message_name: response.message_name})
-            })
-            .catch(err => console.log(err))
-        }
-        else {
-            this.setState({message_name: this.props.cur_url})
-        }
+            }
+            else {
+                dict = {message_name: this.props.cur_url, user: response.user}
+            }
+            this.setState(dict)
+        })
+        .catch(err => console.log(err))
     }
 
     render () {
@@ -86,7 +93,7 @@ class Header extends React.Component {
                         <img className='menu-arrow' src='../images/icons/arrow.svg'/>
                         <PageName type={this.props.cur_url} name={this.state.message_name} />
                         <div className='menu-profile'>
-                            <div className='menu-profile__name'>h1ako</div>
+                            <div className='menu-profile__name'>{this.state.user.name}</div>
                             <div className='menu-profile__pic'></div>
                         </div>
                     </div>

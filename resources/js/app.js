@@ -26,9 +26,6 @@ ReactDOM.render(
     <Route exact path="/friends">
       <Header cur_url={'friends'} urls={['home', 'messages']} />
     </Route>
-    <Route exact path="/login">
-      <Header cur_url={'login'} urls={[]} />
-    </Route>
     <Route exact path="/message">
       <Header cur_url={'messages'} urls={['home', 'friends']} />
     </Route>

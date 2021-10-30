@@ -98,7 +98,7 @@ class Messages extends React.Component {
     render() {
         return (
             <div>
-                <div id='message-area'>
+                <div id='message-area' class='message-area'>
                     <div className='messages'>
                         {this.state.messages.map(message => 
                             <Message
@@ -113,10 +113,11 @@ class Messages extends React.Component {
                             /> 
                         )}
                     </div>
-                    <input id='new_message_text' type='text' name='new_message_text' placeholder='Type Here' />
-                    <label htmlFor="new_message_text">
-                        <button onClick={this.sendMessage} id='message_send'>Send</button>
-                    </label>
+
+                    <div className='new_message-area'>
+                        <input id='new_message_text' type='text' name='new_message_text' class='new_message' placeholder='Type Here' />
+                        <button onClick={this.sendMessage} class='new_message-btn' id='message_send'>Send</button>
+                    </div>
                 </div>
             </div>
         )
@@ -127,23 +128,21 @@ class Message extends React.Component {
     render() {
         if (this.props.sender != this.props.main_user_id) {
             return (
-                <div className='message-area__message'>
-                    <div className='message-name'>{this.props.name}</div>
-                    
-                    <div className='message-content'>
-                        <div className='message-content__time'>{this.props.time}</div>
-                        <div className='message-content__text'>{this.props.text}</div>
+                <div className='messages__message'>
+                    <div className='user-info'>
+                        <div className='message-pic'></div>
+                        <div className='message-name'>{this.props.name}</div>
                     </div>
+                    <div className='message-text'>{this.props.text}</div>
+                    <div className='message-time'>{this.props.time}</div>
                 </div>
             );
         }
         else {
             return (
                 <div className='message-area__message user-message'>
-                    <div className='message-content'>
-                        <div className='message-content__time'>{this.props.time}</div>
-                        <div className='message-content__text'>{this.props.text}</div>
-                    </div>
+                    <div className='message-content__time'>{this.props.time}</div>
+                    <div className='message-content__text'>{this.props.text}</div>
                 </div>
             );
         }

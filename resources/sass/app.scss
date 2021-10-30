@@ -163,9 +163,9 @@ main {
     width: 60%;
     margin: 0 auto;
     min-height: 100vh;
-    padding-block: clamp(19vh, 190px, 20vh) clamp(5vh, 50px, 6vh);
 
     .search-area{
+        padding-block: clamp(19vh, 190px, 20vh) clamp(5vh, 50px, 6vh);
         position: relative;
         display: flex;
         flex-direction: column;
@@ -200,14 +200,14 @@ main {
             position: relative;
             display: flex;
             flex-direction: column;
-            width: 90%;
+            width: 95%;
             align-items: center;
             .search-result{
                 margin-top: 15px;
                 position: relative;
                 width: 100%;
                 height: 80px;
-                border-radius: 45px;
+                border-radius: 25px;
                 background: $color-field-bg;
                 padding: 20px 30px;
                 display: flex;
@@ -239,7 +239,7 @@ main {
                         border: none;
                         padding: 6px 15px;
                         border-radius: 25px;
-                        color: white;
+                        color: $color-text;
                         font-size: 18px;
 
                         &:nth-child(2) {
@@ -248,6 +248,195 @@ main {
                     }
                 }
             }
+        }
+    }
+
+    .login-area{
+        padding-block: clamp(4vh, 40px, 5vh) clamp(5vh, 50px, 6vh);
+        display: flex;
+        width: 90%;
+        margin: 0 auto;
+        position: relative;
+        flex-direction: column;
+        .btns-area{
+            display: flex;
+            align-items: center;
+            width: 100%;
+            justify-content: flex-start;
+
+
+            &__btn{
+                cursor: pointer;
+                background: $color-btn-bg;
+                outline: none;
+                border: none;
+                padding: 6px 15px;
+                border-radius: 25px;
+                color: $color-text;
+                font-size: 18px;
+                &:nth-child(2){
+                    margin-left: 10px;
+                }
+            }
+        }
+
+        .form-login{
+            margin-top: 60px;
+            flex-grow: 1;
+            width: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            &__part{
+                padding-left: 30px;
+                border-radius: 25px;
+                font-size: 18px;
+                background-color: $color-field-bg;
+                border: none;
+                outline: none;
+                color: $color-text;
+                width: 60%;
+                height: 40px;
+                margin-top: 15px;
+                &::placeholder {
+                    color: $color-text;
+                    font-family: $font-family-sans-serif;
+                    font-weight: 400;
+                    font-size: 20px;
+    
+                }
+            }
+            &__submit{
+                margin-top: 15px;
+                cursor: pointer;
+                background: $color-btn-bg;
+                outline: none;
+                border: none;
+                padding: 6px 15px;
+                border-radius: 25px;
+                color: $color-text;
+                font-size: 18px;
+            }
+        }
+    }
+
+    .friends-area{
+        padding-block: clamp(19vh, 190px, 20vh) clamp(5vh, 50px, 6vh);
+        display: flex;
+        position: relative;
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+
+        .btns-area{
+            display: flex;
+            align-items: center;
+            width: 95%;
+            justify-content: flex-start;
+
+            &__btn{
+                cursor: pointer;
+                background: $color-btn-bg;
+                outline: none;
+                border: none;
+                padding: 6px 15px;
+                border-radius: 25px;
+                color: $color-text;
+                font-size: 18px;
+                &:nth-child(2){
+                    margin-left: 10px;
+                }
+            }
+        }
+
+        .friends{
+            margin-top: 30px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            width: 95%;
+            align-items: center;
+            &__friend{
+                margin-top: 15px;
+                position: relative;
+                width: 100%;
+                height: 80px;
+                border-radius: 25px;
+                background: $color-field-bg;
+                padding: 20px 30px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                .main-info{
+                    display: flex;
+                    align-items: center;
+                    color: $color-text;
+                    text-decoration: none;
+                    &__pic{
+                        width: 40px;
+                        height: 40px;
+                        background: white;
+                        border-radius: 50%;
+                    }
+                    &__name{
+                        font-size: 24px;
+                        margin-left: 5px;
+                        transform: translateY(6px);
+                    }
+                }
+                .result-btn{
+                    display: flex;
+                    align-items: center;
+
+                    .user-btn{
+                        cursor: pointer;
+                        background: $color-btn-bg;
+                        outline: none;
+                        border: none;
+                        padding: 6px 15px;
+                        border-radius: 25px;
+                        color: $color-text;
+                        font-size: 18px;
+
+                        &:nth-child(2) {
+                            margin-right: 5px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .message-area{
+        padding-block: clamp(19vh, 190px, 20vh) clamp(5vh, 50px, 6vh);
+        display: flex;
+        position: relative;
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+        .messages{
+            margin-top: 30px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            width: 95%;
+            align-items: center;
+            &__message{
+                .user-info{
+                    .message-pic{}
+                    .message-name{}
+                }
+                .message-text{}
+                .message-time{}
+                &.user-message{}
+            }
+        }
+        .new_message-area{
+
+            .new_message{}
+            .new_message-btn{}
         }
     }
 }
@@ -259,12 +448,4 @@ main {
     &.active {
         display: flex;
     }
-}
-
-.message-area__message{
-    color: green;
-}
-
-.user-message{
-    color: red;
 }

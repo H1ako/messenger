@@ -40,9 +40,6 @@ Route::post('/friends/actions', [UserController::class, 'friendAction']);
 /* =+=+=+= Message =+=+=+= */
 Route::get('/message', function() {
     if (Auth::check()) {
-        // $chat = new Chat(['name' => 'Rabotyagi']);
-        // $chat->save();
-        // $chat->members()->create(['user_id' => 1, 'role' => 'creator']);
         return view('chats');
     }
     return redirect('/login');

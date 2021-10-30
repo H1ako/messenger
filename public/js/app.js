@@ -1896,13 +1896,6 @@ react_dom__WEBPACK_IMPORTED_MODULE_5__.render( /*#__PURE__*/(0,react_jsx_runtime
     })
   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_9__.Route, {
     exact: true,
-    path: "/login",
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components_Header__WEBPACK_IMPORTED_MODULE_6__["default"], {
-      cur_url: 'login',
-      urls: []
-    })
-  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_9__.Route, {
-    exact: true,
     path: "/message",
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components_Header__WEBPACK_IMPORTED_MODULE_6__["default"], {
       cur_url: 'messages',
@@ -2655,46 +2648,45 @@ var Friends = /*#__PURE__*/function (_React$Component) {
       check_box: _this.props.check_box ? true : false
     });
 
-    _defineProperty(_assertThisInitialized(_this), "get_friends", /*#__PURE__*/function () {
-      var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(e) {
-        var data;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                data = {
-                  type: 'friend'
-                };
-                _context.next = 3;
-                return fetch('/friends/get', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json;charset=utf-8',
-                    'X-CSRF-Token': document.querySelector('meta[name="_token"]').getAttribute('content')
-                  },
-                  body: JSON.stringify(data)
-                }).then(function (response) {
-                  return response.json();
-                }).then(function (response) {
-                  if (response) _this.setState({
-                    users: response
-                  });
-                })["catch"](function (err) {
-                  return console.log(err);
+    _defineProperty(_assertThisInitialized(_this), "get_friends", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+      var type,
+          data,
+          _args = arguments;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              type = _args.length > 0 && _args[0] !== undefined ? _args[0] : 'friend';
+              data = {
+                type: type
+              };
+              _context.next = 4;
+              return fetch('/friends/get', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json;charset=utf-8',
+                  'X-CSRF-Token': document.querySelector('meta[name="_token"]').getAttribute('content')
+                },
+                body: JSON.stringify(data)
+              }).then(function (response) {
+                return response.json();
+              }).then(function (response) {
+                console.log("response: " + response);
+
+                _this.setState({
+                  users: response
                 });
+              })["catch"](function (err) {
+                return console.log(err);
+              });
 
-              case 3:
-              case "end":
-                return _context.stop();
-            }
+            case 4:
+            case "end":
+              return _context.stop();
           }
-        }, _callee);
-      }));
-
-      return function (_x) {
-        return _ref.apply(this, arguments);
-      };
-    }());
+        }
+      }, _callee);
+    })));
 
     return _this;
   }
@@ -2702,9 +2694,28 @@ var Friends = /*#__PURE__*/function (_React$Component) {
   _createClass(Friends, [{
     key: "render",
     value: function render() {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+      var _this2 = this;
+
+      console.log(this.state.users);
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
         id: "friends-area",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("form", {
+        className: "friends-area",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+          className: "btns-area",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+            className: "btns-area__btn",
+            onClick: function onClick() {
+              return _this2.get_friends();
+            },
+            children: "Friends"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+            className: "btns-area__btn",
+            onClick: function onClick() {
+              return _this2.get_friends("request");
+            },
+            children: "Requests"
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("form", {
           className: "friends",
           method: "post",
           children: this.state.users.map(function (user) {
@@ -2714,7 +2725,7 @@ var Friends = /*#__PURE__*/function (_React$Component) {
               status: user.status
             }, user.id);
           })
-        })
+        })]
       });
     }
   }, {
@@ -2733,7 +2744,7 @@ var Friend = /*#__PURE__*/function (_React$Component2) {
   var _super2 = _createSuper(Friend);
 
   function Friend() {
-    var _this2;
+    var _this3;
 
     _classCallCheck(this, Friend);
 
@@ -2741,9 +2752,9 @@ var Friend = /*#__PURE__*/function (_React$Component2) {
       args[_key2] = arguments[_key2];
     }
 
-    _this2 = _super2.call.apply(_super2, [this].concat(args));
+    _this3 = _super2.call.apply(_super2, [this].concat(args));
 
-    _defineProperty(_assertThisInitialized(_this2), "FriendAction", /*#__PURE__*/function () {
+    _defineProperty(_assertThisInitialized(_this3), "FriendAction", /*#__PURE__*/function () {
       var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(action) {
         var data;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
@@ -2752,9 +2763,9 @@ var Friend = /*#__PURE__*/function (_React$Component2) {
               case 0:
                 data = {
                   action: action,
-                  user_id: _this2.props.friend_id
+                  user_id: _this3.props.friend_id
                 };
-                console.log(action, _this2.props.friend_id);
+                console.log(action, _this3.props.friend_id);
                 _context2.next = 4;
                 return fetch('/friends/actions', {
                   method: 'POST',
@@ -2773,39 +2784,36 @@ var Friend = /*#__PURE__*/function (_React$Component2) {
         }, _callee2);
       }));
 
-      return function (_x2) {
+      return function (_x) {
         return _ref2.apply(this, arguments);
       };
     }());
 
-    return _this2;
+    return _this3;
   }
 
   _createClass(Friend, [{
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this4 = this;
 
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
         className: "friends__friend",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("a", {
+          href: "/message/".concat(this.props.friend_id),
           className: "main-info",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
-            href: "/message/".concat(this.props.friend_id),
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-              className: "main-info__name",
-              children: this.props.name
-            })
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+            className: "main-info__pic"
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-            className: "main-info__id",
-            children: this.props.friend_id
+            className: "main-info__name",
+            children: this.props.name
           })]
         }), this.props.status == 'friend' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
           className: "result-btn",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
             className: "user-btn btn-remove",
             onClick: function onClick() {
-              return _this3.FriendAction('removeFriend');
+              return _this4.FriendAction('removeFriend');
             },
             children: "Remove"
           })
@@ -2814,7 +2822,7 @@ var Friend = /*#__PURE__*/function (_React$Component2) {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
             className: "user-btn btn-remove",
             onClick: function onClick() {
-              return _this3.FriendAction('removeRequest');
+              return _this4.FriendAction('removeRequest');
             },
             children: "Remove request"
           })
@@ -2823,19 +2831,16 @@ var Friend = /*#__PURE__*/function (_React$Component2) {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
             className: "user-btn btn-add",
             onClick: function onClick() {
-              return _this3.FriendAction('acceptRequest');
+              return _this4.FriendAction('acceptRequest');
             },
             children: "Accept"
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
             className: "user-btn btn-remove",
             onClick: function onClick() {
-              return _this3.FriendAction('declineRequest');
+              return _this4.FriendAction('declineRequest');
             },
             children: "Cancel"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-          className: "status",
-          children: this.props.status
         })]
       });
     }
@@ -2897,6 +2902,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
+
 var NavLink = /*#__PURE__*/function (_React$Component) {
   _inherits(NavLink, _React$Component);
 
@@ -2941,7 +2947,7 @@ var NavLink = /*#__PURE__*/function (_React$Component) {
             children: "Friends"
           })]
         })
-      });
+      });else return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.Fragment, {});
     }
   }]);
 
@@ -2990,7 +2996,7 @@ var PageName = /*#__PURE__*/function (_React$Component2) {
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h1", {
           children: this.props.name
         })]
-      });
+      });else return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.Fragment, {});
     }
   }]);
 
@@ -3015,7 +3021,8 @@ var Header = /*#__PURE__*/function (_React$Component3) {
 
     _defineProperty(_assertThisInitialized(_this), "state", {
       menu_open: false,
-      message_name: ''
+      message_name: '',
+      user: {}
     });
 
     _defineProperty(_assertThisInitialized(_this), "signOut", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
@@ -3093,29 +3100,33 @@ var Header = /*#__PURE__*/function (_React$Component3) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      if (this.props.cur_url == 'messages_id') {
-        fetch('/message_action/get_message_info', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8',
-            'X-CSRF-Token': document.querySelector('meta[name="_token"]').getAttribute('content')
-          }
-        }).then(function (response) {
-          return response.json();
-        }).then(function (response) {
-          console.log(response);
+      fetch('/message_action/get_message_info', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8',
+          'X-CSRF-Token': document.querySelector('meta[name="_token"]').getAttribute('content')
+        }
+      }).then(function (response) {
+        return response.json();
+      }).then(function (response) {
+        var dict = {};
 
-          _this2.setState({
-            message_name: response.message_name
-          });
-        })["catch"](function (err) {
-          return console.log(err);
-        });
-      } else {
-        this.setState({
-          message_name: this.props.cur_url
-        });
-      }
+        if (_this2.props.cur_url == 'messages_id') {
+          dict = {
+            message_name: response.message_name,
+            user: response.user
+          };
+        } else {
+          dict = {
+            message_name: _this2.props.cur_url,
+            user: response.user
+          };
+        }
+
+        _this2.setState(dict);
+      })["catch"](function (err) {
+        return console.log(err);
+      });
     }
   }, {
     key: "render",
@@ -3137,7 +3148,7 @@ var Header = /*#__PURE__*/function (_React$Component3) {
               className: "menu-profile",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
                 className: "menu-profile__name",
-                children: "h1ako"
+                children: this.state.user.name
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
                 className: "menu-profile__pic"
               })]
@@ -3244,7 +3255,6 @@ var Login = /*#__PURE__*/function (_React$Component) {
     _defineProperty(_assertThisInitialized(_this), "login", /*#__PURE__*/function () {
       var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(event) {
         var type,
-            form,
             data,
             _args = arguments;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
@@ -3252,7 +3262,6 @@ var Login = /*#__PURE__*/function (_React$Component) {
             switch (_context.prev = _context.next) {
               case 0:
                 type = _args.length > 1 && _args[1] !== undefined ? _args[1] : 'login';
-                form = document.getElementById('form-login');
 
                 if (type == 'login') {
                   data = {
@@ -3271,7 +3280,7 @@ var Login = /*#__PURE__*/function (_React$Component) {
                 }
 
                 console.log(type);
-                _context.next = 6;
+                _context.next = 5;
                 return fetch('/login', {
                   method: 'POST',
                   headers: {
@@ -3290,7 +3299,7 @@ var Login = /*#__PURE__*/function (_React$Component) {
                   return console.log(err);
                 });
 
-              case 6:
+              case 5:
               case "end":
                 return _context.stop();
             }
@@ -3312,7 +3321,8 @@ var Login = /*#__PURE__*/function (_React$Component) {
       var _this2 = this;
 
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-        id: "login-form",
+        className: "login-area",
+        id: "login-area",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
           className: "btns-area",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
@@ -3322,7 +3332,7 @@ var Login = /*#__PURE__*/function (_React$Component) {
                 type: 'login'
               });
             },
-            children: "Log In"
+            children: "Sign In"
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
             className: "btns-area__btn btn-register",
             onClick: function onClick() {
@@ -3341,17 +3351,17 @@ var Login = /*#__PURE__*/function (_React$Component) {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
             type: "email",
             name: "email",
-            className: "form-login__part",
-            placeholder: "email"
+            className: "form-login__part email",
+            placeholder: "Email"
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
             type: "password",
             name: "first_pass",
-            className: "form-login__part",
-            placeholder: "password"
+            className: "form-login__part pass1",
+            placeholder: "Password"
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
             type: "submit",
             className: "form-login__submit",
-            value: "Log In"
+            value: "Sign In"
           })]
         }), this.state.type == 'register' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("form", {
           onSubmit: function onSubmit(e) {
@@ -3362,25 +3372,25 @@ var Login = /*#__PURE__*/function (_React$Component) {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
             type: "text",
             name: "name",
-            className: "form-login__part",
+            className: "form-login__part name",
             placeholder: "Name"
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
             type: "email",
             name: "email",
-            className: "form-login__part",
-            placeholder: "email"
+            className: "form-login__part email",
+            placeholder: "Email"
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
             type: "password",
             name: "first_pass",
-            className: "form-login__part",
+            className: "form-login__part pass1",
             id: "first_pass",
-            placeholder: "password"
+            placeholder: "Password"
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
             type: "password",
             name: "second_pass",
-            className: "form-login__part",
+            className: "form-login__part pass2",
             id: "second_pass",
-            placeholder: "password again"
+            placeholder: "Password Again"
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
             type: "submit",
             className: "form-login__submit",
@@ -3612,6 +3622,7 @@ var Messages = /*#__PURE__*/function (_React$Component) {
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
           id: "message-area",
+          "class": "message-area",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
             className: "messages",
             children: this.state.messages.map(function (message) {
@@ -3624,18 +3635,20 @@ var Messages = /*#__PURE__*/function (_React$Component) {
                 main_user_id: _this3.state.cur_user_id
               }, message.id);
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("input", {
-            id: "new_message_text",
-            type: "text",
-            name: "new_message_text",
-            placeholder: "Type Here"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("label", {
-            htmlFor: "new_message_text",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+            className: "new_message-area",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("input", {
+              id: "new_message_text",
+              type: "text",
+              name: "new_message_text",
+              "class": "new_message",
+              placeholder: "Type Here"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
               onClick: this.sendMessage,
+              "class": "new_message-btn",
               id: "message_send",
               children: "Send"
-            })
+            })]
           })]
         })
       });
@@ -3661,34 +3674,33 @@ var Message = /*#__PURE__*/function (_React$Component2) {
     value: function render() {
       if (this.props.sender != this.props.main_user_id) {
         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-          className: "message-area__message",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-            className: "message-name",
-            children: this.props.name
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-            className: "message-content",
+          className: "messages__message",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+            className: "user-info",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-              className: "message-content__time",
-              children: this.props.time
+              className: "message-pic"
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-              className: "message-content__text",
-              children: this.props.text
+              className: "message-name",
+              children: this.props.name
             })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+            className: "message-text",
+            children: this.props.text
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+            className: "message-time",
+            children: this.props.time
           })]
         });
       } else {
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
           className: "message-area__message user-message",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-            className: "message-content",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-              className: "message-content__time",
-              children: this.props.time
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-              className: "message-content__text",
-              children: this.props.text
-            })]
-          })
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+            className: "message-content__time",
+            children: this.props.time
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+            className: "message-content__text",
+            children: this.props.text
+          })]
         });
       }
     }
@@ -3715,8 +3727,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 
@@ -3751,7 +3762,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
-
 var Search = /*#__PURE__*/function (_React$Component) {
   _inherits(Search, _React$Component);
 
@@ -3769,44 +3779,51 @@ var Search = /*#__PURE__*/function (_React$Component) {
     _this = _super.call.apply(_super, [this].concat(args));
 
     _defineProperty(_assertThisInitialized(_this), "state", {
-      users: []
+      users: [],
+      search_term: ''
     });
 
-    _defineProperty(_assertThisInitialized(_this), "input_change", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-      var text, data;
-      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              text = document.getElementById('search-field').value;
-              data = {
-                text_field: text
-              };
-              _context.next = 4;
-              return fetch('/get_users', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json;charset=utf-8',
-                  'X-CSRF-Token': document.querySelector('meta[name="_token"]').getAttribute('content')
-                },
-                body: JSON.stringify(data)
-              }).then(function (response) {
-                return response.json();
-              }).then(function (response) {
-                if (response) _this.setState({
-                  users: response
+    _defineProperty(_assertThisInitialized(_this), "input_change", /*#__PURE__*/function () {
+      var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee(e) {
+        var text, data;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                text = document.getElementById('search-field').value;
+                data = {
+                  text_field: text
+                };
+                _context.next = 4;
+                return fetch('/get_users', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json;charset=utf-8',
+                    'X-CSRF-Token': document.querySelector('meta[name="_token"]').getAttribute('content')
+                  },
+                  body: JSON.stringify(data)
+                }).then(function (response) {
+                  return response.json();
+                }).then(function (response) {
+                  if (response) _this.setState({
+                    users: response
+                  });
+                })["catch"](function (err) {
+                  return console.log(err);
                 });
-              })["catch"](function (err) {
-                return console.log(err);
-              });
 
-            case 4:
-            case "end":
-              return _context.stop();
+              case 4:
+              case "end":
+                return _context.stop();
+            }
           }
-        }
-      }, _callee);
-    })));
+        }, _callee);
+      }));
+
+      return function (_x) {
+        return _ref.apply(this, arguments);
+      };
+    }());
 
     return _this;
   }
@@ -3816,19 +3833,19 @@ var Search = /*#__PURE__*/function (_React$Component) {
     value: function render() {
       var _this2 = this;
 
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
         className: "search-area",
         id: "search-area",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("input", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
           id: "search-field",
           type: "text",
           className: "search-field",
           placeholder: "Search",
           onChange: this.input_change
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
           className: "search-results",
           children: this.state.users.map(function (user) {
-            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(SearchResult, {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(SearchResult, {
               func: _this2.input_change,
               id: user.id,
               name: user.name,
@@ -3891,7 +3908,7 @@ var SearchResult = /*#__PURE__*/function (_React$Component2) {
         }, _callee2);
       }));
 
-      return function (_x) {
+      return function (_x2) {
         return _ref2.apply(this, arguments);
       };
     }());
@@ -3904,45 +3921,45 @@ var SearchResult = /*#__PURE__*/function (_React$Component2) {
     value: function render() {
       var _this4 = this;
 
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
         className: "search-result",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
           className: "main-info",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
             className: "main-info__pic"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
             className: "main-info__name",
             children: this.props.name
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
           className: "result-btn",
-          children: [this.props.status == 'friend' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
+          children: [this.props.status == 'friend' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
             className: "user-btn btn-remove",
             onClick: function onClick() {
               return _this4.FriendAction('removeFriend');
             },
             children: "Remove"
-          }), this.props.status == 'request' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
+          }), this.props.status == 'request' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
             className: "user-btn btn-remove",
             onClick: function onClick() {
               return _this4.FriendAction('removeRequest');
             },
             children: "Remove request"
-          }), this.props.status == 'request_to_me' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
+          }), this.props.status == 'request_to_me' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
               className: "user-btn btn-add",
               onClick: function onClick() {
                 return _this4.FriendAction('acceptRequest');
               },
               children: "Accept"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
               className: "user-btn btn-remove",
               onClick: function onClick() {
                 return _this4.FriendAction('declineRequest');
               },
               children: "Cancel"
             })]
-          }), this.props.status == 'notFriend' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
+          }), this.props.status == 'notFriend' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
             className: "user-btn btn-add",
             onClick: function onClick() {
               return _this4.FriendAction('addFriend');

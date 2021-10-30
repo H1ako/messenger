@@ -21,20 +21,26 @@ class UserController extends Controller
                 if ($friend) $user->status = $friend->status;
                 else $user->status = 'notFriend';
             }
-            return json_encode($users);
+            return $users;
         }
         return '[]';
     }
 
     public function get_friends(Request $request) {
-        $cur_user = Auth::user();
-        $type = $request->input('type');
-        $friends = $cur_user->friends->where('status', $type);
+        $cur_user = User::find(Auth::id());
+        $type = $request->input('type'); 
+        // No Errors here
+        if ($type == 'friend') {
+            $friends = $cur_user->friends()->where('status', 'friend')->get();
+        }
+        else {
+            $friends = $cur_user->friends()->where('status', '!=', 'friend')->get();
+        }
 
         foreach ($friends as $friend) {
-            $friend->name = User::where('id', $friend->friend_id)->first()->name;
+            $friend->name = User::find($friend->friend_id)->name;
         }
-        return json_encode($friends);
+        return $friends;
     }
 
     public function friendAction(Request $request) {
@@ -46,6 +52,7 @@ class UserController extends Controller
             $friends = Friend::whereIn('user_id', [$cur_user->id, $user_id])
                             ->whereIn('friend_id', [$cur_user->id, $user_id])
                             ->get();
+            
             foreach ($friends as $friend) {
                $friend->delete(); 
             }

@@ -1,14 +1,15 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 class Search extends React.Component{
 
     state = {
-        users: []
+        users: [],
+        search_term: ''
     }
 
-    input_change = async () => {
-        const text = document.getElementById('search-field').value;
+    input_change = async (e) => {
+        
+        const text = document.getElementById('search-field').value
         const data = {
             text_field: text,
         }
