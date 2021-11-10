@@ -14,6 +14,20 @@ body {
     font-weight: 400;
 }
 
+.ui-btn{
+    background: $color-btn-bg;
+    outline: none;
+    border: none;
+    padding: 8px 20px;
+    cursor: pointer;
+    border-radius: 25px;
+    color: $color-text;
+    font-size: 20px;
+    &:not(:first-child) {
+        margin-left: 10px;
+    }
+}
+
 /* =+=+=+= Header =+=+=+= */
 header {
     z-index: 999;
@@ -242,7 +256,7 @@ main {
                         color: $color-text;
                         font-size: 18px;
 
-                        &:nth-child(2) {
+                        &:not(:first-child) {
                             margin-right: 5px;
                         }
                     }
@@ -252,42 +266,29 @@ main {
     }
 
     .login-area{
-        padding-block: clamp(4vh, 40px, 5vh) clamp(5vh, 50px, 6vh);
         display: flex;
         width: 90%;
+        min-height: 100vh;
         margin: 0 auto;
+        justify-content: center;
         position: relative;
         flex-direction: column;
         .btns-area{
+            margin-top: 60px;
             display: flex;
             align-items: center;
             width: 100%;
             justify-content: flex-start;
-
-
-            &__btn{
-                cursor: pointer;
-                background: $color-btn-bg;
-                outline: none;
-                border: none;
-                padding: 6px 15px;
-                border-radius: 25px;
-                color: $color-text;
-                font-size: 18px;
-                &:nth-child(2){
-                    margin-left: 10px;
-                }
-            }
         }
 
         .form-login{
-            margin-top: 60px;
             flex-grow: 1;
             width: 100%;
             position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
 
             &__part{
                 padding-left: 30px;
@@ -297,7 +298,7 @@ main {
                 border: none;
                 outline: none;
                 color: $color-text;
-                width: 60%;
+                width: clamp(60%, 400px, 90%);
                 height: 40px;
                 margin-top: 15px;
                 &::placeholder {
@@ -308,16 +309,8 @@ main {
     
                 }
             }
-            &__submit{
+            .ui-btn{
                 margin-top: 15px;
-                cursor: pointer;
-                background: $color-btn-bg;
-                outline: none;
-                border: none;
-                padding: 6px 15px;
-                border-radius: 25px;
-                color: $color-text;
-                font-size: 18px;
             }
         }
     }
@@ -335,20 +328,6 @@ main {
             align-items: center;
             width: 95%;
             justify-content: flex-start;
-
-            &__btn{
-                cursor: pointer;
-                background: $color-btn-bg;
-                outline: none;
-                border: none;
-                padding: 6px 15px;
-                border-radius: 25px;
-                color: $color-text;
-                font-size: 18px;
-                &:nth-child(2){
-                    margin-left: 10px;
-                }
-            }
         }
 
         .friends{
@@ -437,6 +416,48 @@ main {
 
             .new_message{}
             .new_message-btn{}
+        }
+    }
+
+    .chats-area{
+        .chats{
+            &__btns-area{}
+            &__messages{
+                .message{
+                    &__pic{}
+                    &__wrapper{
+                        a {
+                            .message__wrapper__name{}
+                        }
+                        &__content{
+                            .content__user-name{}
+                            .content__user-message{
+                                .content__text{}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .modal-friends{
+
+            &__close{}
+            &__input{}
+            &__friends{
+                .friends__friend{
+                    &__content{
+                        .main-info{
+                            &__pic{}
+                            &__name{}
+                        }
+                    }
+                    &__checkbox{}
+                }
+            }
+            .ui-btn{
+                margin-top: 10px;
+            }
         }
     }
 }

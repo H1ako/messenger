@@ -32,8 +32,8 @@ class Friends extends React.Component{
         return (
             <div id='friends-area' className='friends-area'>
                 <div className='btns-area'>
-                    <button className='btns-area__btn' onClick={() => this.get_friends()}>Friends</button>
-                    <button className='btns-area__btn' onClick={() => this.get_friends("request")}>Requests</button>
+                    <button className='ui-btn' onClick={() => this.get_friends()}>Friends</button>
+                    <button className='ui-btn' onClick={() => this.get_friends("request")}>Requests</button>
                 </div>
                 <form className='friends' method='post'>
                     {this.state.users.map(user => 

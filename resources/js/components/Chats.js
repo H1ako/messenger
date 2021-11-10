@@ -43,12 +43,13 @@ class Chats extends React.Component {
     render() {
         return (
             <div>
-                <div id='chats'>
-                    <div className="message-btns-area">
-                        <button className="message-btn" onClick={() => this.messageBtnClick('dialog')}>Dialogs</button>
-                        <button className="message-btn" onClick={() => this.messageBtnClick('chat')}>Chats</button>
+                <div id='chats' className='chats'>
+                    <div className="chats__btns-area">
+                        <button className="ui-btn" onClick={() => this.messageBtnClick('dialog')}>Dialogs</button>
+                        <button className="ui-btn" onClick={() => this.messageBtnClick('chat')}>Chats</button>
+                        <button className='ui-btn' onClick={this.props.new_chat_func}>New Chat</button>
                     </div>
-                    <div className='messages'>
+                    <div className='chats__messages'>
                         {this.state.messages.map(message => 
                             <Chat 
                             key={message.id}
@@ -74,15 +75,19 @@ class Chat extends React.Component {
         if (this.props.type == 'chat') {
             return (
                 <div className='message'>
-                    <a href={`/message/${this.props.id}?chat`}>
-                        <div className='message__name'>{this.props.chat_name}</div>
-                    </a>
-                    <div className='message__content'>
-                        <div className='message__user-name'>{this.props.user_name}</div>
-                        <div className='message__user-message'>
-                            <span className='message__text'>{this.props.text}</span>
+                    <div className='message__pic'></div>
+                    <div className='message__wrapper'>
+                        <a href={`/message/${this.props.id}?chat`}>
+                            <div className='message__wrapper__name'>{this.props.chat_name}</div>
+                        </a>
+                        <div className='message__wrapper__content'>
+                            <div className='content__user__name'>{this.props.user_name}</div>
+                            <div className='content__user__message'>
+                                <span className='content__text'>{this.props.text}</span>
+                            </div>
                         </div>
                     </div>
+                    
                 </div>
             );
         }
@@ -90,12 +95,14 @@ class Chat extends React.Component {
         else if (this.props.type == 'dialog') {
             return (
                 <div className='message'>
-                    
-                    <a href={`/message/${this.props.user_id}`}>
-                        <div className='message__name'>{this.props.user_name}</div>
-                    </a>
-                    <div className='message__content'>
-                        <span className='message__text'>{this.props.text}</span>
+                    <div className='message__pic'></div>
+                    <div className='message__wrapper'>
+                        <a href={`/message/${this.props.user_id}`}>
+                            <div className='message__name'>{this.props.user_name}</div>
+                        </a>
+                        <div className='message__wrapper__content'>
+                            <span className='content__text'>{this.props.text}</span>
+                        </div>
                     </div>
                 </div>
             );

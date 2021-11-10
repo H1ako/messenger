@@ -45,24 +45,26 @@ class Login extends React.Component {
     render () {
         return (
             <div className='login-area' id='login-area'>
-                <div className='btns-area'>
-                    <button className='btns-area__btn btn-login' onClick={() => this.setState({type: 'login'})}>Sign In</button>
-                    <button className='btns-area__btn btn-register' onClick={() => this.setState({type: 'register'})}>Sign Up</button>
+                 <div className='btns-area'>
+                    <button className='ui-btn' onClick={() => this.setState({type: 'login'})}>Sign In</button>
+                    <button className='ui-btn' onClick={() => this.setState({type: 'register'})}>Sign Up</button>
                 </div>
                 {this.state.type == 'login' &&
                 <form onSubmit={(e) => this.login(e, 'login')} className='form-login' id='form-login'>
+                    <h1>Sign In</h1>
                     <input type='email' name='email' className='form-login__part email' placeholder='Email'/>
                     <input type='password' name='first_pass' className='form-login__part pass1' placeholder='Password'/>
-                    <input type='submit' className='form-login__submit' value='Sign In'/>
+                    <input type='submit' className='ui-btn' value='Confirm'/>
                 </form>
                 }
                 {this.state.type == 'register' &&
                 <form onSubmit={(e) => this.login(e, 'register')} className='form-login' id='form-login'>
+                    <h1>Sign Up</h1>
                     <input type='text' name='name' className='form-login__part name' placeholder='Name'/>
                     <input type='email' name='email' className='form-login__part email' placeholder='Email'/>
                     <input type='password' name='first_pass' className='form-login__part pass1' id='first_pass' placeholder='Password'/>
                     <input type='password' name='second_pass' className='form-login__part pass2' id='second_pass' placeholder='Password Again'/>
-                    <input type='submit' className='form-login__submit' value='Sign Up'/>
+                    <input type='submit' className='ui-btn' value='Confirm'/>
                 </form>
                 }
             </div>

@@ -92,27 +92,25 @@ class Chats_Route extends React.Component {
 
     render() {
         return (
-            <div id='chat-area'>
-                <button id='new-chat-btn' onClick={this.setModalState}>New Chat</button>
-                <Chats />
+            <div id='chats-area' className='chats-area'>
+                <Chats new_chat_func={this.setModalState}/>
                 <div className={`modal-friends${this.state.friends_modal ? ' active' : ''}`}>
-                    <button onClick={this.setModalState}>Close</button>
+                    <img onClick={this.setModalState} className='modal-friends__close' src='../images/icons/close.svg'/>
                     <input onChange={this.chatNameOnChange.bind(this)} className='modal-friends__input' id='modal-friends__chat-name' type='text' value={this.state.chat_name} placeholder='Chat Name'/>
-                    <form className='friends' method='post'>
+                    <form className='modal-friends__friends' method='post'>
                         {this.state.users.map(user => 
                             <div className='friends__friend' key={user.id}>
-                                <div className='friend-content'>
+                                <div className='friends__friend__content'>
                                     <div className='main-info'>
+                                        <div className='main-info__pic'></div>
                                         <a href={`/message/${user.friend_id}`}><div className='main-info__name'>{user.name}</div></a>
-                                        <div className='main-info__id'>{user.friend_id}</div>
                                     </div>
-                                    <div className='status'>{user.status}</div>
                                 </div>
-                                <input onChange={this.checkboxOnChange.bind(this)} className='friend-checkbox' type='checkbox' value={user.friend_id}/>
+                                <input onChange={this.checkboxOnChange.bind(this)} className='friends__friend__checkbox' type='checkbox' value={user.friend_id}/>
                             </div>
                         )}
                     </form>
-                    <button onClick={this.createChat}>Create</button>
+                    <button className='ui-btn' onClick={this.createChat}>Create</button>
                 </div>
             </div>
         )

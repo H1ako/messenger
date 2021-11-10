@@ -355,6 +355,20 @@ body {
   font-weight: 400;
 }
 
+.ui-btn {
+  background: #0E354A;
+  outline: none;
+  border: none;
+  padding: 8px 20px;
+  cursor: pointer;
+  border-radius: 25px;
+  color: white;
+  font-size: 20px;
+}
+.ui-btn:not(:first-child) {
+  margin-left: 10px;
+}
+
 /* =+=+=+= Header =+=+=+= */
 header {
   z-index: 999;
@@ -589,44 +603,33 @@ main .search-area .search-results .search-result .result-btn .user-btn {
   color: white;
   font-size: 18px;
 }
-main .search-area .search-results .search-result .result-btn .user-btn:nth-child(2) {
+main .search-area .search-results .search-result .result-btn .user-btn:not(:first-child) {
   margin-right: 5px;
 }
 main .login-area {
-  padding-block: clamp(4vh, 40px, 5vh) clamp(5vh, 50px, 6vh);
   display: flex;
   width: 90%;
+  min-height: 100vh;
   margin: 0 auto;
+  justify-content: center;
   position: relative;
   flex-direction: column;
 }
 main .login-area .btns-area {
+  margin-top: 60px;
   display: flex;
   align-items: center;
   width: 100%;
   justify-content: flex-start;
 }
-main .login-area .btns-area__btn {
-  cursor: pointer;
-  background: #0E354A;
-  outline: none;
-  border: none;
-  padding: 6px 15px;
-  border-radius: 25px;
-  color: white;
-  font-size: 18px;
-}
-main .login-area .btns-area__btn:nth-child(2) {
-  margin-left: 10px;
-}
 main .login-area .form-login {
-  margin-top: 60px;
   flex-grow: 1;
   width: 100%;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 main .login-area .form-login__part {
   padding-left: 30px;
@@ -636,7 +639,7 @@ main .login-area .form-login__part {
   border: none;
   outline: none;
   color: white;
-  width: 60%;
+  width: clamp(60%, 400px, 90%);
   height: 40px;
   margin-top: 15px;
 }
@@ -658,16 +661,8 @@ main .login-area .form-login__part::placeholder {
   font-weight: 400;
   font-size: 20px;
 }
-main .login-area .form-login__submit {
+main .login-area .form-login .ui-btn {
   margin-top: 15px;
-  cursor: pointer;
-  background: #0E354A;
-  outline: none;
-  border: none;
-  padding: 6px 15px;
-  border-radius: 25px;
-  color: white;
-  font-size: 18px;
 }
 main .friends-area {
   padding-block: clamp(19vh, 190px, 20vh) clamp(5vh, 50px, 6vh);
@@ -682,19 +677,6 @@ main .friends-area .btns-area {
   align-items: center;
   width: 95%;
   justify-content: flex-start;
-}
-main .friends-area .btns-area__btn {
-  cursor: pointer;
-  background: #0E354A;
-  outline: none;
-  border: none;
-  padding: 6px 15px;
-  border-radius: 25px;
-  color: white;
-  font-size: 18px;
-}
-main .friends-area .btns-area__btn:nth-child(2) {
-  margin-left: 10px;
 }
 main .friends-area .friends {
   margin-top: 30px;
@@ -766,6 +748,10 @@ main .message-area .messages {
   width: 95%;
   align-items: center;
 }
+main .chats-area .modal-friends .ui-btn {
+  margin-top: 10px;
+}
+
 .modal-friends {
   display: none;
 }
