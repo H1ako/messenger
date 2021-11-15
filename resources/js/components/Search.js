@@ -28,10 +28,15 @@ class Search extends React.Component{
         .catch(err => console.log(err))
     }
 
+    input_change_interval = async () => {
+        clearTimeout(this.id)
+        this.id = setTimeout(this.input_change, 200)
+    }
+
     render () {
         return (
             <div className='search-area' id='search-area'>
-                <input id='search-field' type='text' className='search-field' placeholder='Search' onChange={this.input_change}/>
+                <input id='search-field' type='text' className='search-field' placeholder='Search' onChange={this.input_change_interval}/>
                 <div className='search-results'>
                     {this.state.users.map(user => 
                     <SearchResult 

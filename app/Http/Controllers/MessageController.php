@@ -24,17 +24,28 @@ class MessageController extends Controller
         $messages_id = Cookie::get('messages_id');
         $message_type = Cookie::get('message_type');
         $message_name = '';
+        $message_users = [];
+        $cur_user_role = '';
         if ($message_type == 'dialog') {
             $message_name = User::find($messages_id)->name;
             // $dialog = $cur_user->dialogs->where('to_id', $messages_id)->first()->dialog;
         }
         else if ($message_type == 'chat') {
-            $message_name = Chat::find($messages_id)->name;
+            $message = Chat::find($messages_id);
+            $message_name = $message->name;
+            $message_users = $message->members;
+            $cur_user_role = $message_users->where('user_id', $cur_user->id)->first();
+            foreach($message_users as $user) {
+                $user->user_name = User::find($user->user_id)->name;
+            }
         }
-        return json_encode([
+        return [
             'message_name' => $message_name,
-            'user' => $cur_user
-        ]);
+            'user' => $cur_user,
+            'user_role' => $cur_user_role,
+            'type' => $message_type,
+            'users' => $message_users
+        ];
     }
 
     public function show_message($messages_id) {
@@ -53,18 +64,18 @@ class MessageController extends Controller
                             ['from_id' => $cur_user->id, 'to_id' => $messages_id, 'dialog_id' => $dialog->id],
                             ['to_id' => $cur_user->id, 'from_id' => $messages_id, 'dialog_id' => $dialog->id]
                         ]);
-                        setcookie('messages_id', $dialog->id, time()+3600);
+                        setcookie('messages_id', $dialog->id, time()+604800);
                     }
-                    else setcookie('messages_id', $dialog->dialog_id, time()+3600);
+                    else setcookie('messages_id', $dialog->dialog_id, time()+604800);
                     
                 }
                 else return redirect('/friends');
             }
-            else setcookie('messages_id', $messages_id, time()+3600);
-            Cookie::queue('message_type', $message_type, time()+3600);
-            Cookie::queue('messages_id', $messages_id, time()+3600);
-            setcookie('cur_user_id', $cur_user->id, time()+3600);
-            setcookie('message_type', $message_type, time()+3600);
+            else setcookie('messages_id', $messages_id, time()+604800);
+            Cookie::queue('message_type', $message_type, time()+604800);
+            Cookie::queue('messages_id', $messages_id, time()+604800);
+            setcookie('cur_user_id', $cur_user->id, time()+604800);
+            setcookie('message_type', $message_type, time()+604800);
             return view('message_user');           
         }
         else return redirect('/login');
@@ -127,7 +138,7 @@ class MessageController extends Controller
             }
             // $red_url = redirect() "{url: }"
             // return "/messages/$new_chat->id?chat";
-            return json_encode(['url' => route('messages', [$new_chat->id]).'?chat']);
+            return ['url' => route('messages', [$new_chat->id]).'?chat'];
         }
         
     }

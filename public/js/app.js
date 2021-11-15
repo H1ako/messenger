@@ -2039,6 +2039,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
 var Chats = /*#__PURE__*/function (_React$Component) {
   _inherits(Chats, _React$Component);
 
@@ -2057,7 +2058,8 @@ var Chats = /*#__PURE__*/function (_React$Component) {
 
     _defineProperty(_assertThisInitialized(_this), "state", {
       messages: [],
-      message_type: 'dialog'
+      message_type: 'dialog',
+      btns_active: false
     });
 
     _defineProperty(_assertThisInitialized(_this), "messageBtnClick", /*#__PURE__*/function () {
@@ -2067,13 +2069,13 @@ var Chats = /*#__PURE__*/function (_React$Component) {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return _this.setState({
-                  message_type: message_type
-                });
+                return _this.getMessages(message_type);
 
               case 2:
                 _context.next = 4;
-                return _this.getMessages();
+                return _this.setState({
+                  message_type: message_type
+                });
 
               case 4:
               case "end":
@@ -2089,14 +2091,14 @@ var Chats = /*#__PURE__*/function (_React$Component) {
     }());
 
     _defineProperty(_assertThisInitialized(_this), "getMessages", /*#__PURE__*/function () {
-      var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(e) {
+      var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(type) {
         var data;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
                 data = {
-                  message_type: _this.state.message_type
+                  message_type: type
                 };
                 _context2.next = 3;
                 return fetch('/message_action/get_chats', {
@@ -2113,8 +2115,6 @@ var Chats = /*#__PURE__*/function (_React$Component) {
                     _this.setState({
                       messages: response
                     });
-
-                    console.log(response);
                   }
                 })["catch"](function (err) {
                   return console.log(err);
@@ -2139,52 +2139,70 @@ var Chats = /*#__PURE__*/function (_React$Component) {
   _createClass(Chats, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      this.getMessages();
+      var _this2 = this;
+
+      this.getMessages('dialog');
+      window.addEventListener('scroll', /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                if (window.scrollY > 100 && !_this2.state.btns_active) _this2.setState({
+                  btns_active: true
+                });else if (window.scrollY < 100 && _this2.state.btns_active) _this2.setState({
+                  btns_active: false
+                });
+
+              case 1:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      })));
     }
   }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
+      var _this3 = this;
 
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-          id: "chats",
-          className: "chats",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-            className: "chats__btns-area",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
-              className: "ui-btn",
-              onClick: function onClick() {
-                return _this2.messageBtnClick('dialog');
-              },
-              children: "Dialogs"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
-              className: "ui-btn",
-              onClick: function onClick() {
-                return _this2.messageBtnClick('chat');
-              },
-              children: "Chats"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
-              className: "ui-btn",
-              onClick: this.props.new_chat_func,
-              children: "New Chat"
-            })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-            className: "chats__messages",
-            children: this.state.messages.map(function (message) {
-              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(Chat, {
-                id: message.chat_id,
-                type: _this2.state.message_type,
-                text: message.last_message,
-                user_name: message.user_name,
-                last_message_user: message.last_message_user,
-                mess_id: message.mess_id,
-                chat_name: message.name,
-                user_id: message.to_id
-              }, message.id);
-            })
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        id: "chats",
+        className: "chats",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+          className: "chats__btns-area".concat(this.state.btns_active ? ' active' : ''),
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+            className: "ui-btn",
+            onClick: function onClick() {
+              return _this3.messageBtnClick('dialog');
+            },
+            children: "Dialogs"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+            className: "ui-btn",
+            onClick: function onClick() {
+              return _this3.messageBtnClick('chat');
+            },
+            children: "Chats"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+            className: "ui-btn",
+            onClick: this.props.new_chat_func,
+            children: "New Chat"
           })]
-        })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+          className: "chats__messages",
+          children: this.state.messages.map(function (message) {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(Chat, {
+              id: message.chat_id,
+              type: _this3.state.message_type,
+              text: message.last_message,
+              user_name: message.user_name,
+              last_message_user: message.last_message_user,
+              mess_id: message.mess_id,
+              chat_name: message.name,
+              user_id: message.to_id
+            }, message.id);
+          })
+        })]
       });
     }
   }]);
@@ -2207,50 +2225,47 @@ var Chat = /*#__PURE__*/function (_React$Component2) {
     key: "render",
     value: function render() {
       if (this.props.type == 'chat') {
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("a", {
           className: "message",
+          href: "/message/".concat(this.props.id, "?chat"),
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
             className: "message__pic"
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
             className: "message__wrapper",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
-              href: "/message/".concat(this.props.id, "?chat"),
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-                className: "message__wrapper__name",
-                children: this.props.chat_name
-              })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+              className: "message__wrapper__name",
+              children: this.props.chat_name
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
               className: "message__wrapper__content",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-                className: "content__user__name",
-                children: this.props.user_name
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-                className: "content__user__message",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
-                  className: "content__text",
+              children: this.props.text && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.Fragment, {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+                  className: "content__user__pic"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                  className: "content__user__name",
+                  children: [this.props.user_name, ":"]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+                  className: "content__user__text",
                   children: this.props.text
-                })
-              })]
+                })]
+              })
             })]
           })]
         });
       } else if (this.props.type == 'dialog') {
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("a", {
           className: "message",
+          href: "/message/".concat(this.props.user_id),
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
             className: "message__pic"
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
             className: "message__wrapper",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
-              href: "/message/".concat(this.props.user_id),
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-                className: "message__name",
-                children: this.props.user_name
-              })
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+              className: "message__wrapper__name",
+              children: this.props.user_name
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
               className: "message__wrapper__content",
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
-                className: "content__text",
+                className: "content__user__text",
                 children: this.props.text
               })
             })]
@@ -2435,9 +2450,7 @@ var Chats_Route = /*#__PURE__*/function (_React$Component) {
                   chat_name: e.target.value
                 });
 
-                console.log(_this.state.chat_name);
-
-              case 2:
+              case 1:
               case "end":
                 return _context3.stop();
             }
@@ -2534,10 +2547,15 @@ var Chats_Route = /*#__PURE__*/function (_React$Component) {
           new_chat_func: this.setModalState
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
           className: "modal-friends".concat(this.state.friends_modal ? ' active' : ''),
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("img", {
-            onClick: this.setModalState,
-            className: "modal-friends__close",
-            src: "../images/icons/close.svg"
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+            className: "modal-friends__top",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("img", {
+              onClick: this.setModalState,
+              className: "modal-friends__top__close",
+              src: "../images/icons/close.svg"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("h2", {
+              children: "New Chat"
+            })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("input", {
             onChange: this.chatNameOnChange.bind(this),
             className: "modal-friends__input",
@@ -2551,25 +2569,26 @@ var Chats_Route = /*#__PURE__*/function (_React$Component) {
             children: this.state.users.map(function (user) {
               return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
                 className: "friends__friend",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
                   className: "friends__friend__content",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-                    className: "main-info",
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-                      className: "main-info__pic"
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("a", {
-                      href: "/message/".concat(user.friend_id),
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-                        className: "main-info__name",
-                        children: user.name
-                      })
-                    })]
-                  })
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("input", {
-                  onChange: _this2.checkboxOnChange.bind(_this2),
-                  className: "friends__friend__checkbox",
-                  type: "checkbox",
-                  value: user.friend_id
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+                    className: "content__pic"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("a", {
+                    href: "/message/".concat(user.friend_id),
+                    className: "content__name",
+                    children: user.name
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("label", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("input", {
+                    onChange: _this2.checkboxOnChange.bind(_this2),
+                    name: "modal-friend",
+                    className: "friends__friend__checkbox",
+                    type: "checkbox",
+                    value: user.friend_id
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("img", {
+                    src: "../images/icons/checked.svg",
+                    alt: "V"
+                  })]
                 })]
               }, user.id);
             })
@@ -3015,10 +3034,54 @@ var PageName = /*#__PURE__*/function (_React$Component2) {
   return PageName;
 }(react__WEBPACK_IMPORTED_MODULE_1__.Component);
 
-var Header = /*#__PURE__*/function (_React$Component3) {
-  _inherits(Header, _React$Component3);
+var ChatMember = /*#__PURE__*/function (_React$Component3) {
+  _inherits(ChatMember, _React$Component3);
 
-  var _super3 = _createSuper(Header);
+  var _super3 = _createSuper(ChatMember);
+
+  function ChatMember() {
+    _classCallCheck(this, ChatMember);
+
+    return _super3.apply(this, arguments);
+  }
+
+  _createClass(ChatMember, [{
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        className: "modal-chatInfo-window__members_member",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+          className: "member__mainInfo",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+            className: "member__mainInfo__pic"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+            className: "member__mainInfo__name",
+            children: this.props.user.user_name
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+          className: "member__role",
+          children: this.props.user.role
+        }), this.props.user_role == 'creator' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+          className: "member__btns",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+            className: "ui-btn",
+            children: "Kick"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+            className: "ui-btn",
+            children: "Ban"
+          })]
+        })]
+      });
+    }
+  }]);
+
+  return ChatMember;
+}(react__WEBPACK_IMPORTED_MODULE_1__.Component);
+
+var Header = /*#__PURE__*/function (_React$Component4) {
+  _inherits(Header, _React$Component4);
+
+  var _super4 = _createSuper(Header);
 
   function Header() {
     var _this;
@@ -3029,19 +3092,63 @@ var Header = /*#__PURE__*/function (_React$Component3) {
       args[_key] = arguments[_key];
     }
 
-    _this = _super3.call.apply(_super3, [this].concat(args));
+    _this = _super4.call.apply(_super4, [this].concat(args));
 
     _defineProperty(_assertThisInitialized(_this), "state", {
       menu_open: false,
+      modal_open: false,
+      user: {},
+      user_role: '',
+      message_type: '',
       message_name: '',
-      user: {}
+      users: []
     });
 
-    _defineProperty(_assertThisInitialized(_this), "signOut", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-      var data;
+    _defineProperty(_assertThisInitialized(_this), "getHeaderData", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
+            case 0:
+              fetch('/message_action/get_message_info', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json;charset=utf-8',
+                  'X-CSRF-Token': document.querySelector('meta[name="_token"]').getAttribute('content')
+                }
+              }).then(function (response) {
+                return response.json();
+              }).then(function (response) {
+                // if (this.props.cur_url == 'messages_id') {
+                // }
+                // else {
+                //     dict = {message_name: this.props.cur_url, user: response.user}
+                // }
+                console.log(response);
+
+                _this.setState({
+                  user: response.user,
+                  user_role: response.user_role,
+                  message_type: response.type,
+                  message_name: response.message_name,
+                  users: response.users
+                });
+              })["catch"](function (err) {
+                return console.log(err);
+              });
+
+            case 1:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    })));
+
+    _defineProperty(_assertThisInitialized(_this), "signOut", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+      var data;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
             case 0:
               data = {
                 type: 'logOut'
@@ -3063,18 +3170,18 @@ var Header = /*#__PURE__*/function (_React$Component3) {
 
             case 2:
             case "end":
-              return _context.stop();
+              return _context2.stop();
           }
         }
-      }, _callee);
+      }, _callee2);
     })));
 
     _defineProperty(_assertThisInitialized(_this), "menuOpenClose", /*#__PURE__*/function () {
-      var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(e) {
+      var _ref3 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3(e) {
         var par, scrollHeight;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
           while (1) {
-            switch (_context2.prev = _context2.next) {
+            switch (_context3.prev = _context3.next) {
               case 0:
                 par = document.getElementById('header-menu');
 
@@ -3093,14 +3200,58 @@ var Header = /*#__PURE__*/function (_React$Component3) {
 
               case 3:
               case "end":
-                return _context2.stop();
+                return _context3.stop();
             }
           }
-        }, _callee2);
+        }, _callee3);
       }));
 
       return function (_x) {
-        return _ref2.apply(this, arguments);
+        return _ref3.apply(this, arguments);
+      };
+    }());
+
+    _defineProperty(_assertThisInitialized(_this), "setModalState", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              if (!_this.state.modal_open) {
+                _this.getHeaderData();
+              }
+
+              _this.setState({
+                modal_open: !_this.state.modal_open
+              });
+
+            case 2:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, _callee4);
+    })));
+
+    _defineProperty(_assertThisInitialized(_this), "chatNameOnChange", /*#__PURE__*/function () {
+      var _ref5 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5(e) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                _this.setState({
+                  message_name: e.target.value
+                });
+
+              case 1:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5);
+      }));
+
+      return function (_x2) {
+        return _ref5.apply(this, arguments);
       };
     }());
 
@@ -3110,41 +3261,15 @@ var Header = /*#__PURE__*/function (_React$Component3) {
   _createClass(Header, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      var _this2 = this;
-
-      fetch('/message_action/get_message_info', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json;charset=utf-8',
-          'X-CSRF-Token': document.querySelector('meta[name="_token"]').getAttribute('content')
-        }
-      }).then(function (response) {
-        return response.json();
-      }).then(function (response) {
-        var dict = {};
-
-        if (_this2.props.cur_url == 'messages_id') {
-          dict = {
-            message_name: response.message_name,
-            user: response.user
-          };
-        } else {
-          dict = {
-            message_name: _this2.props.cur_url,
-            user: response.user
-          };
-        }
-
-        _this2.setState(dict);
-      })["catch"](function (err) {
-        return console.log(err);
-      });
+      this.getHeaderData();
     }
   }, {
     key: "render",
     value: function render() {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("header", {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      var _this2 = this;
+
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("header", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
           className: "header-menu",
           id: "header-menu",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
@@ -3182,7 +3307,38 @@ var Header = /*#__PURE__*/function (_React$Component3) {
               })
             })]
           })]
-        })
+        }), this.state.message_type == 'chat' && this.props.cur_url == 'messages_id' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+          className: "ui-btn",
+          onClick: this.setModalState,
+          children: "Info"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+          className: "modal-chatInfo".concat(this.state.modal_open ? ' active' : ''),
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+            className: "modal-chatInfo-window",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+              className: "modal-chatInfo-window__main",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+                className: "modal-chatInfo-window__main__pic"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+                value: this.state.message_name,
+                onChange: this.chatNameOnChange,
+                className: "modal-chatInfo-window__main__name"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("img", {
+                onClick: this.setModalState,
+                className: "modal-chatInfo-window__main__close",
+                src: "../images/icons/close.svg"
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+              className: "modal-chatInfo-window__members",
+              children: this.state.users.map(function (user) {
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(ChatMember, {
+                  user_role: _this2.state.user_role,
+                  user: user
+                }, user.user_id);
+              })
+            })]
+          })
+        })]
       });
     }
   }]);
@@ -3554,10 +3710,9 @@ var Messages = /*#__PURE__*/function (_React$Component) {
             case 0:
               input = document.getElementById('new_message_text');
               input_value = input.value;
-              console.log((0,lodash__WEBPACK_IMPORTED_MODULE_1__.filter)(input_value));
 
               if (!((0,lodash__WEBPACK_IMPORTED_MODULE_1__.filter)(input_value) != '')) {
-                _context2.next = 11;
+                _context2.next = 10;
                 break;
               }
 
@@ -3577,7 +3732,7 @@ var Messages = /*#__PURE__*/function (_React$Component) {
                 }])
               });
 
-              _context2.next = 11;
+              _context2.next = 10;
               return fetch('/message_action/send', {
                 method: 'POST',
                 headers: {
@@ -3588,7 +3743,7 @@ var Messages = /*#__PURE__*/function (_React$Component) {
                 body: JSON.stringify(data)
               });
 
-            case 11:
+            case 10:
             case "end":
               return _context2.stop();
           }
@@ -3609,7 +3764,6 @@ var Messages = /*#__PURE__*/function (_React$Component) {
       this.setState({
         cur_user_id: this.getCookie('cur_user_id')
       });
-      console.log(id, type);
       this.getMessages();
 
       if (type == 'dialog') {
@@ -3638,7 +3792,7 @@ var Messages = /*#__PURE__*/function (_React$Component) {
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
           id: "message-area",
-          "class": "message-area",
+          className: "message-area",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
             className: "messages",
             children: this.state.messages.map(function (message) {
@@ -3657,11 +3811,11 @@ var Messages = /*#__PURE__*/function (_React$Component) {
               id: "new_message_text",
               type: "text",
               name: "new_message_text",
-              "class": "new_message",
+              className: "new_message",
               placeholder: "Type Here"
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
               onClick: this.sendMessage,
-              "class": "new_message-btn",
+              className: "new_message-btn",
               id: "message_send",
               children: "Send"
             })]
@@ -3841,6 +3995,22 @@ var Search = /*#__PURE__*/function (_React$Component) {
       };
     }());
 
+    _defineProperty(_assertThisInitialized(_this), "input_change_interval", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              clearTimeout(_this.id);
+              _this.id = setTimeout(_this.input_change, 200);
+
+            case 2:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2);
+    })));
+
     return _this;
   }
 
@@ -3857,7 +4027,7 @@ var Search = /*#__PURE__*/function (_React$Component) {
           type: "text",
           className: "search-field",
           placeholder: "Search",
-          onChange: this.input_change
+          onChange: this.input_change_interval
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
           className: "search-results",
           children: this.state.users.map(function (user) {
@@ -3894,17 +4064,17 @@ var SearchResult = /*#__PURE__*/function (_React$Component2) {
     _this3 = _super2.call.apply(_super2, [this].concat(args));
 
     _defineProperty(_assertThisInitialized(_this3), "FriendAction", /*#__PURE__*/function () {
-      var _ref2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2(action) {
+      var _ref3 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3(action) {
         var data;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
           while (1) {
-            switch (_context2.prev = _context2.next) {
+            switch (_context3.prev = _context3.next) {
               case 0:
                 data = {
                   action: action,
                   user_id: _this3.props.id
                 };
-                _context2.next = 3;
+                _context3.next = 3;
                 return fetch('/friends/actions', {
                   method: 'POST',
                   headers: {
@@ -3918,14 +4088,14 @@ var SearchResult = /*#__PURE__*/function (_React$Component2) {
 
               case 3:
               case "end":
-                return _context2.stop();
+                return _context3.stop();
             }
           }
-        }, _callee2);
+        }, _callee3);
       }));
 
       return function (_x2) {
-        return _ref2.apply(this, arguments);
+        return _ref3.apply(this, arguments);
       };
     }());
 

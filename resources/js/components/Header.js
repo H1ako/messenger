@@ -18,12 +18,68 @@ class PageName extends React.Component {
     }
 }
 
+class ChatMember extends React.Component {
+    render () {
+        return (
+            <div className='modal-chatInfo-window__members_member'>
+                <div className='member__mainInfo'>
+                    <div className='member__mainInfo__pic'/>
+                    <div className='member__mainInfo__name'>{this.props.user.user_name}</div>
+                </div>
+                <div className='member__role'>
+                    {this.props.user.role}
+                </div>
+                {this.props.user_role == 'creator' &&
+                <div className='member__btns'>
+                    <button className='ui-btn'>Kick</button>
+                    <button className='ui-btn'>Ban</button>
+                </div>
+                }
+                
+            </div>
+        )
+    }
+}
+
 class Header extends React.Component {
 
     state = {
         menu_open: false,
+        modal_open: false,
+        user: {},
+        user_role: '',
+        message_type: '',
         message_name: '',
-        user: {}
+        users: [],
+    }
+
+    getHeaderData = async () => {
+        fetch('/message_action/get_message_info', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+                'X-CSRF-Token': document.querySelector('meta[name="_token"]').getAttribute('content')
+            }
+        })
+        .then(response => response.json())
+        .then((response) => {
+            // if (this.props.cur_url == 'messages_id') {
+                
+                
+            // }
+            // else {
+            //     dict = {message_name: this.props.cur_url, user: response.user}
+            // }
+            console.log(response)
+            this.setState({
+                user: response.user,
+                user_role: response.user_role,
+                message_type: response.type,
+                message_name: response.message_name,
+                users: response.users,
+            })
+        })
+        .catch(err => console.log(err))
     }
 
     signOut = async () => {
@@ -57,32 +113,21 @@ class Header extends React.Component {
             par.classList.remove('active')
             par.style.height = 60+'px';
         }
+    }
 
+    setModalState = async () => {
+        if (!this.state.modal_open) {
+            this.getHeaderData()
+        }
+        this.setState({modal_open: !this.state.modal_open})
+    }
+
+    chatNameOnChange = async (e) => {
+        this.setState({message_name: e.target.value})
     }
 
     componentDidMount() {
-        fetch('/message_action/get_message_info', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8',
-                'X-CSRF-Token': document.querySelector('meta[name="_token"]').getAttribute('content')
-            }
-        })
-        .then(response => response.json())
-        .then((response) => {
-            let dict = {}
-            if (this.props.cur_url == 'messages_id') {
-                dict = {
-                    message_name: response.message_name,
-                    user: response.user
-                }
-            }
-            else {
-                dict = {message_name: this.props.cur_url, user: response.user}
-            }
-            this.setState(dict)
-        })
-        .catch(err => console.log(err))
+        this.getHeaderData();
     }
 
     render () {
@@ -103,6 +148,23 @@ class Header extends React.Component {
                         )}
                         <a><div className='nav__link' onClick={this.signOut}><img src='../images/icons/sign_out.svg'/><h1>Sign Out</h1></div></a>
                     </nav>
+                </div>
+                {this.state.message_type == 'chat' && this.props.cur_url == 'messages_id' &&
+                    <button className='ui-btn' onClick={this.setModalState}>Info</button>
+                }
+                <div className={`modal-chatInfo${this.state.modal_open ? ' active' : ''}`}>
+                    <div className='modal-chatInfo-window'>
+                        <div className='modal-chatInfo-window__main'>
+                            <div className='modal-chatInfo-window__main__pic'/>
+                            <input value={this.state.message_name} onChange={this.chatNameOnChange} className='modal-chatInfo-window__main__name'/>
+                            <img onClick={this.setModalState} className='modal-chatInfo-window__main__close' src='../images/icons/close.svg'/>
+                        </div>
+                        <div className='modal-chatInfo-window__members'>
+                            {this.state.users.map(user =>
+                                <ChatMember key={user.user_id} user_role={this.state.user_role} user={user}/>
+                            )}
+                        </div>
+                    </div>
                 </div>
             </header>
         )

@@ -56,7 +56,6 @@ class Chats_Route extends React.Component {
 
     chatNameOnChange = async (e) => {
         this.setState({chat_name: e.target.value})
-        console.log(this.state.chat_name)
     }
 
     checkboxOnChange = async (e) => {
@@ -95,18 +94,22 @@ class Chats_Route extends React.Component {
             <div id='chats-area' className='chats-area'>
                 <Chats new_chat_func={this.setModalState}/>
                 <div className={`modal-friends${this.state.friends_modal ? ' active' : ''}`}>
-                    <img onClick={this.setModalState} className='modal-friends__close' src='../images/icons/close.svg'/>
+                    <div className='modal-friends__top'>
+                        <img onClick={this.setModalState} className='modal-friends__top__close' src='../images/icons/close.svg'/>
+                        <h2>New Chat</h2>
+                    </div>
                     <input onChange={this.chatNameOnChange.bind(this)} className='modal-friends__input' id='modal-friends__chat-name' type='text' value={this.state.chat_name} placeholder='Chat Name'/>
                     <form className='modal-friends__friends' method='post'>
                         {this.state.users.map(user => 
                             <div className='friends__friend' key={user.id}>
                                 <div className='friends__friend__content'>
-                                    <div className='main-info'>
-                                        <div className='main-info__pic'></div>
-                                        <a href={`/message/${user.friend_id}`}><div className='main-info__name'>{user.name}</div></a>
-                                    </div>
+                                <div className='content__pic'></div>
+                                <a href={`/message/${user.friend_id}`} className='content__name'>{user.name}</a>
                                 </div>
-                                <input onChange={this.checkboxOnChange.bind(this)} className='friends__friend__checkbox' type='checkbox' value={user.friend_id}/>
+                                <label>
+                                    <input onChange={this.checkboxOnChange.bind(this)} name='modal-friend' className='friends__friend__checkbox' type='checkbox' value={user.friend_id}/>
+                                    <img src="../images/icons/checked.svg" alt="V" />
+                                </label>
                             </div>
                         )}
                     </form>

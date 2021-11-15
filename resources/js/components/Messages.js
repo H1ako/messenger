@@ -34,7 +34,6 @@ class Messages extends React.Component {
     sendMessage = async () => {
         let input = document.getElementById('new_message_text')
         let input_value = input.value;
-        console.log(filter(input_value))
         if (filter(input_value) != '') {
             let full_time = new Date();
             let time = `${full_time.getHours()}:${full_time.getMinutes()}`
@@ -70,7 +69,6 @@ class Messages extends React.Component {
         this.setState({
             cur_user_id: this.getCookie('cur_user_id'),
         });
-        console.log(id, type)
         this.getMessages()
         if (type == 'dialog') {
             window.Echo.private(`dialog.${id}`)
@@ -98,7 +96,7 @@ class Messages extends React.Component {
     render() {
         return (
             <div>
-                <div id='message-area' class='message-area'>
+                <div id='message-area' className='message-area'>
                     <div className='messages'>
                         {this.state.messages.map(message => 
                             <Message
@@ -115,8 +113,8 @@ class Messages extends React.Component {
                     </div>
 
                     <div className='new_message-area'>
-                        <input id='new_message_text' type='text' name='new_message_text' class='new_message' placeholder='Type Here' />
-                        <button onClick={this.sendMessage} class='new_message-btn' id='message_send'>Send</button>
+                        <input id='new_message_text' type='text' name='new_message_text' className='new_message' placeholder='Type Here' />
+                        <button onClick={this.sendMessage} className='new_message-btn' id='message_send'>Send</button>
                     </div>
                 </div>
             </div>
