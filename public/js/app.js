@@ -2115,6 +2115,8 @@ var Chats = /*#__PURE__*/function (_React$Component) {
                     _this.setState({
                       messages: response
                     });
+
+                    console.log(response);
                   }
                 })["catch"](function (err) {
                   return console.log(err);
@@ -2192,12 +2194,11 @@ var Chats = /*#__PURE__*/function (_React$Component) {
           className: "chats__messages",
           children: this.state.messages.map(function (message) {
             return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(Chat, {
-              id: message.chat_id,
+              id: message.id,
               type: _this3.state.message_type,
               text: message.last_message,
               user_name: message.user_name,
               last_message_user: message.last_message_user,
-              mess_id: message.mess_id,
               chat_name: message.name,
               user_id: message.to_id
             }, message.id);
@@ -3233,16 +3234,27 @@ var Header = /*#__PURE__*/function (_React$Component4) {
     })));
 
     _defineProperty(_assertThisInitialized(_this), "chatNameOnChange", /*#__PURE__*/function () {
-      var _ref5 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5(e) {
+      var _ref5 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5(text) {
+        var data;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
           while (1) {
             switch (_context5.prev = _context5.next) {
               case 0:
-                _this.setState({
-                  message_name: e.target.value
+                data = {
+                  new_chat_name: text
+                };
+                fetch('/message_action/update_chat_name', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json;charset=utf-8',
+                    'X-CSRF-Token': document.querySelector('meta[name="_token"]').getAttribute('content')
+                  },
+                  body: JSON.stringify(data)
+                })["catch"](function (err) {
+                  return console.log(err);
                 });
 
-              case 1:
+              case 2:
               case "end":
                 return _context5.stop();
             }
@@ -3252,6 +3264,37 @@ var Header = /*#__PURE__*/function (_React$Component4) {
 
       return function (_x2) {
         return _ref5.apply(this, arguments);
+      };
+    }());
+
+    _defineProperty(_assertThisInitialized(_this), "input_change_interval", /*#__PURE__*/function () {
+      var _ref6 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6(e) {
+        var text;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                text = e.target.value;
+
+                _this.setState({
+                  message_name: text
+                });
+
+                clearTimeout(_this.id);
+                _this.id = setTimeout(function () {
+                  return _this.chatNameOnChange(text);
+                }, 200);
+
+              case 4:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6);
+      }));
+
+      return function (_x3) {
+        return _ref6.apply(this, arguments);
       };
     }());
 
@@ -3308,7 +3351,7 @@ var Header = /*#__PURE__*/function (_React$Component4) {
             })]
           })]
         }), this.state.message_type == 'chat' && this.props.cur_url == 'messages_id' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
-          className: "ui-btn",
+          className: "ui-btn info",
           onClick: this.setModalState,
           children: "Info"
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
@@ -3320,8 +3363,10 @@ var Header = /*#__PURE__*/function (_React$Component4) {
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
                 className: "modal-chatInfo-window__main__pic"
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+                id: "chat-name-input",
+                readOnly: this.state.user_role == 'creator' ? false : true,
                 value: this.state.message_name,
-                onChange: this.chatNameOnChange,
+                onChange: this.input_change_interval,
                 className: "modal-chatInfo-window__main__name"
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("img", {
                 onClick: this.setModalState,
@@ -3789,38 +3834,39 @@ var Messages = /*#__PURE__*/function (_React$Component) {
     value: function render() {
       var _this3 = this;
 
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-          id: "message-area",
-          className: "message-area",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-            className: "messages",
-            children: this.state.messages.map(function (message) {
-              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(Message, {
-                id: message.id,
-                name: message.sender_name,
-                text: message.text,
-                time: message.created_at,
-                sender: message.from_id,
-                main_user_id: _this3.state.cur_user_id
-              }, message.id);
-            })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-            className: "new_message-area",
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+        id: "message-area",
+        className: "message-area",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+          className: "messages",
+          children: this.state.messages.map(function (message) {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(Message, {
+              id: message.id,
+              name: message.sender_name,
+              text: message.text,
+              time: message.created_at,
+              sender: message.from_id,
+              main_user_id: _this3.state.cur_user_id
+            }, message.id);
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+          className: "new_message-area",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+            className: "new_message",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("input", {
               id: "new_message_text",
               type: "text",
               name: "new_message_text",
-              className: "new_message",
+              className: "new_message_text",
               placeholder: "Type Here"
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
               onClick: this.sendMessage,
-              className: "new_message-btn",
+              className: "ui-btn",
               id: "message_send",
               children: "Send"
             })]
-          })]
-        })
+          })
+        })]
       });
     }
   }]);
@@ -3845,32 +3891,35 @@ var Message = /*#__PURE__*/function (_React$Component2) {
       if (this.props.sender != this.props.main_user_id) {
         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
           className: "messages__message",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-            className: "user-info",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+            className: "message-pic"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+            className: "main-info",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-              className: "message-pic"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
               className: "message-name",
               children: this.props.name
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+              className: "message-text",
+              children: this.props.text
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+              className: "message-time",
+              children: this.props.time
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-            className: "message-text",
-            children: this.props.text
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-            className: "message-time",
-            children: this.props.time
           })]
         });
       } else {
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-          className: "message-area__message user-message",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-            className: "message-content__time",
-            children: this.props.time
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-            className: "message-content__text",
-            children: this.props.text
-          })]
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+          className: "messages__message user-message",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+            className: "main-info",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+              className: "message-text",
+              children: this.props.text
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+              className: "message-time",
+              children: this.props.time
+            })]
+          })
         });
       }
     }

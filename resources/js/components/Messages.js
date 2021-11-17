@@ -95,26 +95,26 @@ class Messages extends React.Component {
 
     render() {
         return (
-            <div>
-                <div id='message-area' className='message-area'>
-                    <div className='messages'>
-                        {this.state.messages.map(message => 
-                            <Message
-                            key={message.id}
-                            id={message.id}
-                            name={message.sender_name}
-                            text={message.text}
-                            time={message.created_at}
-                            sender={message.from_id}
-                            main_user_id={this.state.cur_user_id}
+            <div id='message-area' className='message-area'>
+                <div className='messages'>
+                    {this.state.messages.map(message => 
+                        <Message
+                        key={message.id}
+                        id={message.id}
+                        name={message.sender_name}
+                        text={message.text}
+                        time={message.created_at}
+                        sender={message.from_id}
+                        main_user_id={this.state.cur_user_id}
 
-                            /> 
-                        )}
-                    </div>
+                        /> 
+                    )}
+                </div>
 
-                    <div className='new_message-area'>
-                        <input id='new_message_text' type='text' name='new_message_text' className='new_message' placeholder='Type Here' />
-                        <button onClick={this.sendMessage} className='new_message-btn' id='message_send'>Send</button>
+                <div className='new_message-area'>
+                    <div className='new_message'>
+                        <input id='new_message_text' type='text' name='new_message_text' className='new_message_text' placeholder='Type Here' />
+                        <button onClick={this.sendMessage} className='ui-btn' id='message_send'>Send</button>
                     </div>
                 </div>
             </div>
@@ -127,20 +127,22 @@ class Message extends React.Component {
         if (this.props.sender != this.props.main_user_id) {
             return (
                 <div className='messages__message'>
-                    <div className='user-info'>
-                        <div className='message-pic'></div>
+                    <div className='message-pic'/>
+                    <div className='main-info'>
                         <div className='message-name'>{this.props.name}</div>
+                        <div className='message-text'>{this.props.text}</div>
+                        <div className='message-time'>{this.props.time}</div>
                     </div>
-                    <div className='message-text'>{this.props.text}</div>
-                    <div className='message-time'>{this.props.time}</div>
                 </div>
             );
         }
         else {
             return (
-                <div className='message-area__message user-message'>
-                    <div className='message-content__time'>{this.props.time}</div>
-                    <div className='message-content__text'>{this.props.text}</div>
+                <div className='messages__message user-message'>
+                    <div className='main-info'>
+                        <div className='message-text'>{this.props.text}</div>
+                        <div className='message-time'>{this.props.time}</div>
+                    </div>
                 </div>
             );
         }

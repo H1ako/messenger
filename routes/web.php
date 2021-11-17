@@ -50,4 +50,5 @@ Route::get('/message/{id}', [MessageController::class, 'show_message'])->name('m
 Route::post('/message_action/get_chats', [MessageController::class, 'get_chats']);
 Route::post('/message_action/get_message_info', [MessageController::class, 'get_message_info']);
 Route::post('/message_action/create_chat', [MessageController::class, 'new_chat']);
+Route::post('/message_action/update_chat_name', [MessageController::class, 'update_chat_name']);
 Route::post('/message_action/send', [MessageController::class, 'new_message']);

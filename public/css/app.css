@@ -501,11 +501,11 @@ header .header-menu nav .nav__link img {
 header .header-menu nav .nav__link h1 {
   font-size: 25px;
 }
-header .ui-btn {
+header .ui-btn.info {
   position: absolute;
   right: 20px;
 }
-header .ui-btn:not(:first-child) {
+header .ui-btn.info:not(:first-child) {
   margin-left: 0;
 }
 header .modal-chatInfo {
@@ -551,13 +551,13 @@ header .modal-chatInfo-window__main__pic {
 header .modal-chatInfo-window__main__name {
   padding-left: 30px;
   border-radius: 25px;
-  font-size: 18px;
+  font-size: 23px;
   background-color: #113549;
   border: none;
   outline: none;
   color: white;
   width: 100%;
-  height: 40px;
+  height: 45px;
   margin-left: 15px;
 }
 header .modal-chatInfo-window__main__close {
@@ -578,7 +578,8 @@ header .modal-chatInfo-window__members {
   padding: 15px;
   width: 80%;
   border-radius: 35px;
-  overflow: hidden scroll;
+  overflow-y: hidden auto;
+  align-items: center;
 }
 header .modal-chatInfo-window__members::-webkit-scrollbar {
   width: 12px;
@@ -610,32 +611,55 @@ header .modal-chatInfo-window__members_member {
   padding: 3px 10px;
   border-radius: 45px;
 }
+header .modal-chatInfo-window__members_member:not(:first-child) {
+  margin-top: 15px;
+}
 header .modal-chatInfo-window__members_member .member__mainInfo {
   display: flex;
   align-items: center;
+  overflow: hidden;
+  flex-shrink: 1;
 }
 header .modal-chatInfo-window__members_member .member__mainInfo__pic {
   background: white;
   width: 34px;
   height: 34px;
   border-radius: 50%;
+  flex-shrink: 0;
 }
 header .modal-chatInfo-window__members_member .member__mainInfo__name {
   font-size: 24px;
   margin-left: 5px;
   transform: translateY(6px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 header .modal-chatInfo-window__members_member .member__role {
+  flex-shrink: 0;
+  overflow: hidden;
+  margin-left: auto;
   background: #0B293A;
-  font-size: 20px;
-  text-transform: capitalize;
   padding: 3px 18px;
   height: 30px;
   border-radius: 10px;
-}
-header .modal-chatInfo-window__members_member .member__btns {
+  font-size: 20px;
+  text-transform: capitalize;
   display: flex;
   align-items: center;
+  justify-content: center;
+  min-width: 120px;
+}
+header .modal-chatInfo-window__members_member .member__btns {
+  flex-shrink: 0;
+  overflow: hidden;
+  margin-left: 15px;
+  display: flex;
+  align-items: center;
+}
+header .modal-chatInfo-window__members_member .member__btns .ui-btn {
+  padding: 0 20px;
+  height: 30px;
 }
 
 /* =+=+=+= Main =+=+=+= */
@@ -643,7 +667,7 @@ main {
   display: flex;
   position: relative;
   background: #0A2534;
-  width: 60%;
+  width: 50%;
   margin: 0 auto;
   min-height: 100vh;
 }
@@ -884,8 +908,77 @@ main .message-area .messages {
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 95%;
+  width: 100%;
+  padding: 0 20px;
+}
+main .message-area .messages__message {
+  margin-top: 20px;
+  display: flex;
+  align-self: flex-start;
+  position: relative;
+  justify-content: center;
+  max-width: 60%;
+}
+main .message-area .messages__message.user-message {
+  align-self: flex-end;
+}
+main .message-area .messages__message.user-message .main-info {
+  align-items: flex-end;
+}
+main .message-area .messages__message .message-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: white;
+}
+main .message-area .messages__message .main-info {
+  margin-left: 20px;
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-items: flex-start;
+}
+main .message-area .messages__message .message-text {
+  max-width: 100%;
+  word-wrap: break-word;
+  border-radius: 25px;
+  padding: 10px 20px;
+  margin-top: 5px;
+  background: #184761;
+}
+main .message-area .messages__message .message-time {
+  margin-top: 5px;
+  font-size: 14px;
+}
+main .message-area .new_message-area {
+  position: fixed;
+  display: flex;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  justify-content: center;
+  align-items: flex-end;
+}
+main .message-area .new_message-area .new_message {
+  display: flex;
+  width: 50%;
+  height: 60px;
+  background: #071D29;
   align-items: center;
+  justify-content: center;
+}
+main .message-area .new_message-area .new_message .new_message_text {
+  padding-left: 30px;
+  border-radius: 25px;
+  font-size: 23px;
+  background-color: #113549;
+  border: none;
+  outline: none;
+  color: white;
+  width: 70%;
+  height: 45px;
+  margin-left: 15px;
 }
 main .chats-area {
   padding-block: clamp(19vh, 190px, 20vh) clamp(5vh, 50px, 6vh);
@@ -910,10 +1003,10 @@ main .chats-area .chats__btns-area {
 main .chats-area .chats__btns-area.active {
   background: #0A2534;
   position: fixed;
-  width: 57%;
+  width: 50%;
+  padding: 20px;
   margin: 0 auto;
   top: 100px;
-  padding-block: 20px;
   z-index: 40;
 }
 main .chats-area .chats__btns-area .ui-btn:nth-child(2) {
@@ -989,6 +1082,9 @@ main .chats-area .chats__messages .message__wrapper__content .content__user__pic
 main .chats-area .chats__messages .message__wrapper__content .content__user__text {
   font-size: 18px;
   margin-left: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 main .chats-area .modal-friends {
   background: #0B293A;
@@ -1057,7 +1153,7 @@ main .chats-area .modal-friends__friends {
   margin-top: 20px;
   background: #113549;
   height: 240px;
-  overflow: hidden scroll;
+  overflow: hidden auto;
   width: 100%;
   display: flex;
   flex-direction: column;

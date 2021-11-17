@@ -10,6 +10,7 @@ use App\Models\Dialog;
 use App\Models\Chat;
 use Illuminate\Support\Facades\Cookie;
 use App\Events\MessageSend;
+use App\Models\DialogMember;
 
 class MessageController extends Controller
 {
@@ -17,6 +18,24 @@ class MessageController extends Controller
 
     public function __construct() {
         $this->middleware('auth');
+    }
+
+    public function update_chat_name(Request $req) {
+        $cur_user = Auth::user();
+        $messages_id = Cookie::get('messages_id');
+        $message_type = Cookie::get('message_type');
+        $new_chat_name = $req->input('new_chat_name');
+
+        if ($message_type == 'chat' && trim($new_chat_name)) {
+            $chat = Chat::find($messages_id);
+            $members = $chat->members();
+            $user_role = $members->where('user_id', $cur_user->id)->first()->role;
+            if ($user_role == 'creator') {
+                $chat->update([
+                    'name' => $new_chat_name
+                ]);
+            }
+        }
     }
 
     public function get_message_info() {
@@ -34,7 +53,7 @@ class MessageController extends Controller
             $message = Chat::find($messages_id);
             $message_name = $message->name;
             $message_users = $message->members;
-            $cur_user_role = $message_users->where('user_id', $cur_user->id)->first();
+            $cur_user_role = $message_users->where('user_id', $cur_user->id)->first()->role;
             foreach($message_users as $user) {
                 $user->user_name = User::find($user->user_id)->name;
             }
@@ -174,24 +193,26 @@ class MessageController extends Controller
         $message_type = $request->input('message_type');
         if ($message_type === 'dialog') {
             $dialogs = $cur_user->dialogs;
+            $dialog_ids = $dialogs->pluck('dialog_id');
+            $dialogs = Dialog::whereIn('id', $dialog_ids)->orderBy('updated_at', 'desc')->get();
             foreach ($dialogs as $dialog) {
-                $cur_dialog = $dialog->dialog;
-                $dialog->user_name = User::find($dialog->to_id)->name;
-                $dialog->last_message = $cur_dialog->last_message;
+                if ($dialog->last_message_user) {
+                    $cur_dialog = DialogMember::where('dialog_id', $dialog->id)->where('to_id', '!=', $cur_user->id)->first();
+                    $dialog->user_name = User::find($cur_dialog->to_id)->name;
+                }
             }
             return $dialogs;
         }
         else if ($message_type === 'chat') {
             $chats = $cur_user->chats;
+            $chat_ids = $chats->pluck('chat_id');
+            $chats = Chat::whereIn('id', $chat_ids)->orderBy('updated_at', 'desc')->get();
             foreach ($chats as $chat) {
-                $cur_chat = $chat->chat;
-                if ($cur_chat->last_message_user) {
-                    $chat->user_name = User::find($cur_chat->last_message_user)->name;
+                if ($chat->last_message_user) {
+                    $chat->user_name = User::find($chat->last_message_user)->name;
                 }
-                $chat->name = $cur_chat->name;
-                $chat->last_message = $cur_chat->last_message;
             }
-            return $chats;
+            return  $chats;
         }
         // $dialog->last_message_user = User::find($cur_dialog->last_message_user)->name;  FOR CHAT
         return "[]";     

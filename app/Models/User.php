@@ -47,10 +47,10 @@ class User extends Authenticatable
     }
 
     public function dialogs() {
-        return $this->hasMany(DialogMember::class, 'from_id', 'id')->orderBy('updated_at', 'asc');
+        return $this->hasMany(DialogMember::class, 'from_id', 'id');
     }
 
     public function chats() {
-        return $this->hasMany(ChatMember::class, 'user_id', 'id')->orderBy('updated_at', 'asc');
+        return $this->hasMany(ChatMember::class, 'user_id', 'id');
     }
 }

@@ -26,9 +26,7 @@ class ChatMember extends React.Component {
                     <div className='member__mainInfo__pic'/>
                     <div className='member__mainInfo__name'>{this.props.user.user_name}</div>
                 </div>
-                <div className='member__role'>
-                    {this.props.user.role}
-                </div>
+                <div className='member__role'>{this.props.user.role}</div>
                 {this.props.user_role == 'creator' &&
                 <div className='member__btns'>
                     <button className='ui-btn'>Kick</button>
@@ -122,8 +120,27 @@ class Header extends React.Component {
         this.setState({modal_open: !this.state.modal_open})
     }
 
-    chatNameOnChange = async (e) => {
-        this.setState({message_name: e.target.value})
+    chatNameOnChange = async (text) => {
+        const data = {
+            new_chat_name: text
+        }
+        fetch('/message_action/update_chat_name', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+                'X-CSRF-Token': document.querySelector('meta[name="_token"]').getAttribute('content')
+            },
+            body: JSON.stringify(data)
+        })
+        .catch(err => console.log(err))
+        
+    }
+    
+    input_change_interval = async (e) => {
+        const text = e.target.value;
+        this.setState({message_name: text})
+        clearTimeout(this.id)
+        this.id = setTimeout(() => this.chatNameOnChange(text), 200)
     }
 
     componentDidMount() {
@@ -150,13 +167,13 @@ class Header extends React.Component {
                     </nav>
                 </div>
                 {this.state.message_type == 'chat' && this.props.cur_url == 'messages_id' &&
-                    <button className='ui-btn' onClick={this.setModalState}>Info</button>
+                    <button className='ui-btn info' onClick={this.setModalState}>Info</button>
                 }
                 <div className={`modal-chatInfo${this.state.modal_open ? ' active' : ''}`}>
                     <div className='modal-chatInfo-window'>
                         <div className='modal-chatInfo-window__main'>
                             <div className='modal-chatInfo-window__main__pic'/>
-                            <input value={this.state.message_name} onChange={this.chatNameOnChange} className='modal-chatInfo-window__main__name'/>
+                            <input id='chat-name-input' readOnly={this.state.user_role == 'creator' ? false : true} value={this.state.message_name} onChange={this.input_change_interval} className='modal-chatInfo-window__main__name'/>
                             <img onClick={this.setModalState} className='modal-chatInfo-window__main__close' src='../images/icons/close.svg'/>
                         </div>
                         <div className='modal-chatInfo-window__members'>

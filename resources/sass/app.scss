@@ -179,7 +179,7 @@ header {
         }
     }
 
-    .ui-btn{
+    .ui-btn.info{
         position: absolute;
         right: 20px;
 
@@ -226,13 +226,13 @@ header {
                 &__name{
                     padding-left: 30px;
                     border-radius: 25px;
-                    font-size: 18px;
+                    font-size: 23px;
                     background-color: $color-message-inside;
                     border: none;
                     outline: none;
                     color: $color-text;
                     width: 100%;
-                    height: 40px;
+                    height: 45px;
                     margin-left: 15px;
                 }
                 &__close{
@@ -255,7 +255,8 @@ header {
                 padding: 15px;
                 width: 80%;
                 border-radius: 35px;
-                overflow: hidden scroll;
+                overflow-y: hidden auto;
+                align-items: center;
                 &::-webkit-scrollbar {
                     width: 12px;
                     }
@@ -286,33 +287,57 @@ header {
                     height: 40px;
                     padding: 3px 10px;
                     border-radius: 45px;
+                    &:not(:first-child) {
+                        margin-top: 15px;
+                    }
                     
                     .member__mainInfo{
                         display: flex;
                         align-items: center;
+                        overflow: hidden;
+                        flex-shrink: 1;
                         &__pic{
                             background: white;
                             width: 34px;
                             height: 34px;
                             border-radius: 50%;
+                            flex-shrink: 0;
                         }
                         &__name{
                             font-size: 24px;
                             margin-left: 5px;
                             transform: translateY(6px);
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
                         }
                     }
                     .member__role{
+                        flex-shrink: 0;
+                        overflow: hidden;
+                        margin-left: auto;
                         background: $color-modal-bg;
-                        font-size: 20px;
-                        text-transform: capitalize;
                         padding: 3px 18px;
                         height: 30px;
                         border-radius: 10px;
-                    }
-                    .member__btns{
+                        font-size: 20px;
+                        text-transform: capitalize;
                         display: flex;
                         align-items: center;
+                        justify-content: center;
+                        min-width: 120px;
+                    }
+                    .member__btns{
+                        flex-shrink: 0;
+                        overflow: hidden;
+                        margin-left: 15px;
+                        display: flex;
+                        align-items: center;
+
+                        .ui-btn{
+                            padding: 0 20px;
+                            height: 30px;
+                        }
                     }
                 }
             }
@@ -325,7 +350,7 @@ main {
     display: flex;
     position: relative;
     background: $color-main-bg;
-    width: 60%;
+    width: 50%;
     margin: 0 auto;
     min-height: 100vh;
 
@@ -550,23 +575,81 @@ main {
             position: relative;
             display: flex;
             flex-direction: column;
-            width: 95%;
-            align-items: center;
+            width: 100%;
+            padding: 0 20px;
             &__message{
-                
-                .user-info{
-                    .message-pic{}
-                    .message-name{}
+                margin-top: 20px;
+                display: flex;
+                align-self: flex-start;
+                position: relative;
+                justify-content: center;
+                max-width: 60%;
+
+                &.user-message{
+                    align-self: flex-end;
+                    .main-info {align-items: flex-end}
+                    
                 }
-                .message-text{}
-                .message-time{}
-                &.user-message{}
+
+                .message-pic{
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                    background: white;
+                }
+                .main-info{
+                    margin-left: 20px;
+                    display: flex;
+                    position: relative;
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+
+                .message-name{
+
+                }
+                .message-text{
+                    max-width: 100%;
+                    word-wrap: break-word;
+                    border-radius: 25px;
+                    padding: 10px 20px;
+                    margin-top: 5px;
+                    background: $color-modal-friend-bg;
+                }
+                .message-time{
+                    margin-top: 5px;
+                    font-size: 14px;
+                }
             }
         }
         .new_message-area{
+            position: fixed;
+            display: flex;
+            top: 0;bottom: 0;left: 0;right: 0;
+            justify-content: center;
+            align-items: flex-end;
 
-            .new_message{}
-            .new_message-btn{}
+            .new_message{
+                display: flex;
+                width: 50%;
+                height: 60px;
+                background: $color-header-bg;
+                align-items: center;
+                justify-content: center;
+
+                .new_message_text{
+                    padding-left: 30px;
+                    border-radius: 25px;
+                    font-size: 23px;
+                    background-color: $color-message-inside;
+                    border: none;
+                    outline: none;
+                    color: $color-text;
+                    width: 70%;
+                    height: 45px;
+                    margin-left: 15px;
+                }
+            }
         }
     }
 
@@ -591,10 +674,10 @@ main {
                 &.active{
                     background: $color-main-bg;
                     position: fixed;
-                    width: 57%;
+                    width: 50%;
+                    padding: 20px;
                     margin: 0 auto;
                     top: 100px;
-                    padding-block: 20px;
                     z-index: 40;
                 }
 
@@ -669,6 +752,9 @@ main {
                             .content__user__text{
                                 font-size: 18px;
                                 margin-left: 5px;
+                                white-space: nowrap;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
                             }
                         }
                     }
@@ -733,7 +819,7 @@ main {
                 margin-top: 20px;
                 background: $color-message-inside;
                 height: 240px;
-                overflow: hidden scroll;
+                overflow: hidden auto;
                 width: 100%;
                 display: flex;
                 flex-direction: column;

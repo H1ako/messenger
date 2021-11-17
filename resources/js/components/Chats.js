@@ -32,6 +32,7 @@ class Chats extends React.Component {
         .then((response) => {
             if (response) {
                 this.setState({messages: response});
+                console.log(response)
             }
         })
         .catch(err => console.log(err))
@@ -60,12 +61,11 @@ class Chats extends React.Component {
                     {this.state.messages.map(message => 
                         <Chat 
                         key={message.id}
-                        id={message.chat_id}
+                        id={message.id}
                         type={this.state.message_type}
                         text={message.last_message}
                         user_name={message.user_name}
                         last_message_user={message.last_message_user}
-                        mess_id={message.mess_id}
                         chat_name={message.name}
                         user_id={message.to_id}
                         /> 
