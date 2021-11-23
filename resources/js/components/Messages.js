@@ -25,7 +25,8 @@ class Messages extends React.Component {
         .then(response => response.json())
         .then((response) => {
             if (response) {
-                this.setState({messages: response});
+                this.setState({messages: response})
+                window.scrollTo(0, document.body.scrollHeight)
             }
         })
         .catch(err => console.log(err))
@@ -49,6 +50,7 @@ class Messages extends React.Component {
                     created_at: time
                 }]
             })
+
             
             await fetch('/message_action/send', {
                 method: 'POST',
@@ -59,6 +61,7 @@ class Messages extends React.Component {
                 },
                 body: JSON.stringify(data)
             })
+            .then(() => window.scrollTo(0, document.body.scrollHeight))
         }
         
     }
@@ -77,6 +80,7 @@ class Messages extends React.Component {
                 this.setState({
                     messages: [...this.state.messages, e.message]
                 })
+                window.scrollTo(0, document.body.scrollHeight)
             });
         }
         else if (type == 'chat') {
@@ -86,11 +90,9 @@ class Messages extends React.Component {
                 this.setState({
                     messages: [...this.state.messages, e.message]
                 })
+                window.scrollTo(0, document.body.scrollHeight)
             });
         }
-        
-        
-
     }
 
     render() {
@@ -113,7 +115,7 @@ class Messages extends React.Component {
 
                 <div className='new_message-area'>
                     <div className='new_message'>
-                        <input id='new_message_text' type='text' name='new_message_text' className='new_message_text' placeholder='Type Here' />
+                        <input onKeyDown={e => {if (e.key == 'Enter') this.sendMessage()}} id='new_message_text' type='text' name='new_message_text' className='new_message_text' placeholder='Type Here' />
                         <button onClick={this.sendMessage} className='ui-btn' id='message_send'>Send</button>
                     </div>
                 </div>

@@ -3734,6 +3734,8 @@ var Messages = /*#__PURE__*/function (_React$Component) {
                   _this.setState({
                     messages: response
                   });
+
+                  window.scrollTo(0, document.body.scrollHeight);
                 }
               })["catch"](function (err) {
                 return console.log(err);
@@ -3786,6 +3788,8 @@ var Messages = /*#__PURE__*/function (_React$Component) {
                   "X-Socket-Id": window.Echo.socketId()
                 },
                 body: JSON.stringify(data)
+              }).then(function () {
+                return window.scrollTo(0, document.body.scrollHeight);
               });
 
             case 10:
@@ -3818,6 +3822,8 @@ var Messages = /*#__PURE__*/function (_React$Component) {
           _this2.setState({
             messages: [].concat(_toConsumableArray(_this2.state.messages), [e.message])
           });
+
+          window.scrollTo(0, document.body.scrollHeight);
         });
       } else if (type == 'chat') {
         window.Echo["private"]("chat.".concat(id)).listen('ChatMessageSend', function (e) {
@@ -3826,6 +3832,8 @@ var Messages = /*#__PURE__*/function (_React$Component) {
           _this2.setState({
             messages: [].concat(_toConsumableArray(_this2.state.messages), [e.message])
           });
+
+          window.scrollTo(0, document.body.scrollHeight);
         });
       }
     }
@@ -3854,6 +3862,9 @@ var Messages = /*#__PURE__*/function (_React$Component) {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
             className: "new_message",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("input", {
+              onKeyDown: function onKeyDown(e) {
+                if (e.key == 'Enter') _this3.sendMessage();
+              },
               id: "new_message_text",
               type: "text",
               name: "new_message_text",
