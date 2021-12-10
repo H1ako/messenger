@@ -38,10 +38,10 @@ class MessageController extends Controller
         }
     }
 
-    public function get_message_info() {
+    public function get_message_info(Request $req) {
         $cur_user = Auth::user();
         $messages_id = Cookie::get('messages_id');
-        $message_type = Cookie::get('message_type');
+        $message_type = $req->input('message_type') == 'message' ? Cookie::get('message_type') : $req->input('message_type');
         $message_name = '';
         $message_users = [];
         $cur_user_role = '';

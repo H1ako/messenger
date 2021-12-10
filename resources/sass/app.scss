@@ -374,7 +374,7 @@ main {
             color: $color-text;
 
             &::placeholder {
-                background: url('/images/icons/search.svg') no-repeat center left;
+                background: url('/public/images/icons/search.svg') no-repeat center left;
                 padding-left: 35px;
                 background-size: 30px 30px;
                 color: $color-text;
@@ -610,7 +610,7 @@ main {
                 }
                 .message-text{
                     max-width: 100%;
-                    word-wrap: break-word;
+                    word-break: break-all;
                     border-radius: 25px;
                     padding: 10px 20px;
                     margin-top: 5px;

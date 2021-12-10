@@ -12,7 +12,7 @@ Route::get('/login', function () {
     ];
     return view('login', $data);
 })->name('login');
-Route::post('/login', [AuthController::class, 'auth']);
+Route::post('/login_enter', [AuthController::class, 'auth']);
 
 
 /* =+=+=+= Home =+=+=+= */

@@ -95,7 +95,7 @@ class Chats_Route extends React.Component {
                 <Chats new_chat_func={this.setModalState}/>
                 <div className={`modal-friends${this.state.friends_modal ? ' active' : ''}`}>
                     <div className='modal-friends__top'>
-                        <img onClick={this.setModalState} className='modal-friends__top__close' src='../images/icons/close.svg'/>
+                        <img onClick={this.setModalState} className='modal-friends__top__close' src='/public/images/icons/close.svg'/>
                         <h2>New Chat</h2>
                     </div>
                     <input onChange={this.chatNameOnChange.bind(this)} className='modal-friends__input' id='modal-friends__chat-name' type='text' value={this.state.chat_name} placeholder='Chat Name'/>
@@ -108,7 +108,7 @@ class Chats_Route extends React.Component {
                                 </div>
                                 <label>
                                     <input onChange={this.checkboxOnChange.bind(this)} name='modal-friend' className='friends__friend__checkbox' type='checkbox' value={user.friend_id}/>
-                                    <img src="../images/icons/checked.svg" alt="V" />
+                                    <img src="/public/images/icons/checked.svg" alt="V" />
                                 </label>
                             </div>
                         )}

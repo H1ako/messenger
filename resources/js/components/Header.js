@@ -1,18 +1,19 @@
+import { type } from 'jquery';
 import React from 'react';
 
 class NavLink extends React.Component {
     render () {
-        if (this.props.type == 'home') return (<a href='/'><div className='nav__link'><img src='../images/icons/home.svg'/><h1>Home</h1></div></a>)
-        else if (this.props.type == 'messages') return (<a href='/message'><div className='nav__link'><img src='../images/icons/messages.svg'/><h1>Messages</h1></div></a>)
-        else if (this.props.type == 'friends') return (<a href='/friends'><div className='nav__link'><img src='../images/icons/friends.svg'/><h1>Friends</h1></div></a>)
+        if (this.props.type == 'home') return (<a href='/'><div className='nav__link'><img src='/public/images/icons/home.svg'/><h1>Home</h1></div></a>)
+        else if (this.props.type == 'messages') return (<a href='/message'><div className='nav__link'><img src='/public/images/icons/messages.svg'/><h1>Messages</h1></div></a>)
+        else if (this.props.type == 'friends') return (<a href='/friends'><div className='nav__link'><img src='/public/images/icons/friends.svg'/><h1>Friends</h1></div></a>)
         else return (<></>)
     }
 }
 class PageName extends React.Component {
     render () {
-        if (this.props.type == 'home') return (<div className='menu-pageName'><img src='../images/icons/home.svg'/><h1>Home</h1></div>)
-        else if (this.props.type == 'messages') return (<div className='menu-pageName'><img src='../images/icons/messages.svg'/><h1>Messages</h1></div>)
-        else if (this.props.type == 'friends') return (<div className='menu-pageName'><img src='../images/icons/friends.svg'/><h1>Friends</h1></div>)
+        if (this.props.type == 'home') return (<div className='menu-pageName'><img src='/public/images/icons/home.svg'/><h1>Home</h1></div>)
+        else if (this.props.type == 'messages') return (<div className='menu-pageName'><img src='/public/images/icons/messages.svg'/><h1>Messages</h1></div>)
+        else if (this.props.type == 'friends') return (<div className='menu-pageName'><img src='/public/images/icons/friends.svg'/><h1>Friends</h1></div>)
         else if (this.props.type == 'messages_id') return (<div className='menu-pageName'><div className='menu-pageName__pic'></div><h1>{this.props.name}</h1></div>)
         else return (<></>)
     }
@@ -52,12 +53,14 @@ class Header extends React.Component {
     }
 
     getHeaderData = async () => {
+        var data = {message_type: this.props.message_type}
         fetch('/message_action/get_message_info', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json;charset=utf-8',
                 'X-CSRF-Token': document.querySelector('meta[name="_token"]').getAttribute('content')
-            }
+            },
+            body: JSON.stringify(data)
         })
         .then(response => response.json())
         .then((response) => {
@@ -72,8 +75,8 @@ class Header extends React.Component {
             this.setState({
                 user: response.user,
                 user_role: response.user_role,
-                message_type: response.type,
                 message_name: response.message_name,
+                message_type: response.type,
                 users: response.users,
             })
         })
@@ -84,7 +87,7 @@ class Header extends React.Component {
         const data = {
             type: 'logOut',
         }
-        fetch('/login', {
+        fetch('/login_enter', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json;charset=utf-8',
@@ -152,7 +155,7 @@ class Header extends React.Component {
             <header>
                 <div className='header-menu' id='header-menu'>
                     <div onClick={this.menuOpenClose} className='header-menu__firstBar'>
-                        <img className='menu-arrow' src='../images/icons/arrow.svg'/>
+                        <img className='menu-arrow' src='/public/images/icons/arrow.svg'/>
                         <PageName type={this.props.cur_url} name={this.state.message_name} />
                         <div className='menu-profile'>
                             <div className='menu-profile__name'>{this.state.user.name}</div>
@@ -163,7 +166,7 @@ class Header extends React.Component {
                         {this.props.urls.map(url =>
                             <NavLink type={url} key={url} />
                         )}
-                        <a><div className='nav__link' onClick={this.signOut}><img src='../images/icons/sign_out.svg'/><h1>Sign Out</h1></div></a>
+                        <a><div className='nav__link' onClick={this.signOut}><img src='/public/images/icons/sign_out.svg'/><h1>Sign Out</h1></div></a>
                     </nav>
                 </div>
                 {this.state.message_type == 'chat' && this.props.cur_url == 'messages_id' &&
@@ -174,7 +177,7 @@ class Header extends React.Component {
                         <div className='modal-chatInfo-window__main'>
                             <div className='modal-chatInfo-window__main__pic'/>
                             <input id='chat-name-input' readOnly={this.state.user_role == 'creator' ? false : true} value={this.state.message_name} onChange={this.input_change_interval} className='modal-chatInfo-window__main__name'/>
-                            <img onClick={this.setModalState} className='modal-chatInfo-window__main__close' src='../images/icons/close.svg'/>
+                            <img onClick={this.setModalState} className='modal-chatInfo-window__main__close' src='/public/images/icons/close.svg'/>
                         </div>
                         <div className='modal-chatInfo-window__members'>
                             {this.state.users.map(user =>

@@ -21,19 +21,28 @@ import ReactDOM from 'react-dom';
 import Header from './components/Header';
 import { BrowserRouter, Route } from 'react-router-dom';
 
+document.addEventListener('DOMContentLoaded', function(){
+  var e = document.querySelector('div[style]');
+  e.parentNode.removeChild(e);
+  var e = document.querySelector('.cbalink');
+  e.parentNode.removeChild(e);
+  var e = document.querySelector('.cumf_bt_form_wrapper');
+  e.parentNode.removeChild(e);
+});
+
 ReactDOM.render(
   <BrowserRouter>
     <Route exact path="/friends">
-      <Header cur_url={'friends'} urls={['home', 'messages']} />
+      <Header cur_url={'friends'} message_type={''} urls={['home', 'messages']} />
     </Route>
     <Route exact path="/message">
-      <Header cur_url={'messages'} urls={['home', 'friends']} />
+      <Header cur_url={'messages'} message_type={''} urls={['home', 'friends']} />
     </Route>
     <Route exact path="/message/:id">
-      <Header cur_url={'messages_id'} urls={['home', 'messages', 'friends']} />
+      <Header cur_url={'messages_id'} message_type={'message'} urls={['home', 'messages', 'friends']} />
     </Route>
     <Route exact path="/">
-      <Header cur_url={'home'} urls={['messages', 'friends']} />
+      <Header cur_url={'home'} message_type={''} urls={['messages', 'friends']} />
     </Route>
     <main>
       <Route exact path="/friends">

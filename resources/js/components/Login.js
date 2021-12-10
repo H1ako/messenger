@@ -24,11 +24,12 @@ class Login extends React.Component {
             }
         }
         console.log(type);
-        await fetch('/login', {
+        await fetch('/login_enter', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json;charset=utf-8',
-                'X-CSRF-Token': document.querySelector('meta[name="_token"]').getAttribute('content')
+                'X-CSRF-Token': document.querySelector('meta[name="_token"]').getAttribute('content'),
+                'Access-Control-Allow-Origin': '*'
             },
             body: JSON.stringify(data)
         })
